@@ -1,0 +1,1281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nixite v2 - Modern Visual NixOS Discovery</title>
+    
+    <!-- Improved Meta Tags -->
+    <meta name="description" content="Visual package discovery for NixOS - Find, install, and manage software with an intuitive interface">
+    <meta name="theme-color" content="#7c3aed">
+    
+    <style>
+        /* CSS Variables for Easy Theming */
+        :root {
+            /* Color Palette - More Accessible */
+            --primary: #7c3aed;
+            --primary-dark: #6d28d9;
+            --primary-light: #a78bfa;
+            --secondary: #06b6d4;
+            --accent: #f59e0b;
+            --success: #10b981;
+            --danger: #ef4444;
+            --warning: #f59e0b;
+            --info: #3b82f6;
+            
+            /* Neutrals */
+            --gray-50: #f9fafb;
+            --gray-100: #f3f4f6;
+            --gray-200: #e5e7eb;
+            --gray-300: #d1d5db;
+            --gray-400: #9ca3af;
+            --gray-500: #6b7280;
+            --gray-600: #4b5563;
+            --gray-700: #374151;
+            --gray-800: #1f2937;
+            --gray-900: #111827;
+            
+            /* Spacing */
+            --spacing-xs: 0.25rem;
+            --spacing-sm: 0.5rem;
+            --spacing-md: 1rem;
+            --spacing-lg: 1.5rem;
+            --spacing-xl: 2rem;
+            --spacing-2xl: 3rem;
+            
+            /* Typography */
+            --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            --font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', monospace;
+            
+            /* Shadows - Softer */
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --shadow-xl: 0 20px 25px -5px rgb(0 0 0 / 0.1);
+            
+            /* Animation */
+            --transition-fast: 150ms;
+            --transition-base: 250ms;
+            --transition-slow: 350ms;
+            
+            /* Border Radius */
+            --radius-sm: 0.375rem;
+            --radius-md: 0.5rem;
+            --radius-lg: 0.75rem;
+            --radius-xl: 1rem;
+            --radius-full: 9999px;
+        }
+
+        /* Dark Mode Variables */
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --gray-50: #111827;
+                --gray-100: #1f2937;
+                --gray-200: #374151;
+                --gray-300: #4b5563;
+                --gray-400: #6b7280;
+                --gray-500: #9ca3af;
+                --gray-600: #d1d5db;
+                --gray-700: #e5e7eb;
+                --gray-800: #f3f4f6;
+                --gray-900: #f9fafb;
+            }
+        }
+
+        /* Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html {
+            font-size: 16px;
+            scroll-behavior: smooth;
+        }
+
+        body {
+            font-family: var(--font-sans);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: var(--gray-900);
+            line-height: 1.6;
+            position: relative;
+        }
+
+        /* Skip to Content - Accessibility */
+        .skip-to-content {
+            position: absolute;
+            top: -40px;
+            left: 0;
+            background: var(--primary);
+            color: white;
+            padding: var(--spacing-sm) var(--spacing-md);
+            text-decoration: none;
+            z-index: 10000;
+            border-radius: var(--radius-md);
+        }
+
+        .skip-to-content:focus {
+            top: var(--spacing-md);
+        }
+
+        /* Animated Background - Performance Optimized */
+        .background-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            opacity: 0.3;
+            z-index: 0;
+        }
+
+        .gradient-orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(40px);
+            animation: float 20s infinite;
+            will-change: transform;
+        }
+
+        .gradient-orb:nth-child(1) {
+            width: 300px;
+            height: 300px;
+            background: radial-gradient(circle, #667eea, transparent);
+            top: -150px;
+            left: -150px;
+            animation-duration: 25s;
+        }
+
+        .gradient-orb:nth-child(2) {
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, #764ba2, transparent);
+            bottom: -200px;
+            right: -200px;
+            animation-duration: 30s;
+            animation-delay: -5s;
+        }
+
+        .gradient-orb:nth-child(3) {
+            width: 250px;
+            height: 250px;
+            background: radial-gradient(circle, #06b6d4, transparent);
+            top: 50%;
+            left: 50%;
+            animation-duration: 35s;
+            animation-delay: -10s;
+        }
+
+        @keyframes float {
+            0%, 100% { 
+                transform: translate(0, 0) rotate(0deg); 
+            }
+            33% { 
+                transform: translate(30px, -30px) rotate(120deg); 
+            }
+            66% { 
+                transform: translate(-20px, 20px) rotate(240deg); 
+            }
+        }
+
+        /* Header - Improved */
+        header {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            padding: var(--spacing-md) var(--spacing-lg);
+            box-shadow: var(--shadow-lg);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            transition: all var(--transition-base);
+        }
+
+        header.scrolled {
+            padding: var(--spacing-sm) var(--spacing-lg);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .header-container {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: var(--spacing-lg);
+            flex-wrap: wrap;
+        }
+
+        .logo-section {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .logo {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            color: white;
+            font-size: 1.25rem;
+            transition: transform var(--transition-base);
+        }
+
+        .logo:hover {
+            transform: rotate(-10deg) scale(1.05) translateZ(0);
+        }
+
+        h1 {
+            font-size: clamp(1.25rem, 3vw, 1.75rem);
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .tagline {
+            font-size: 0.875rem;
+            color: var(--gray-500);
+            font-weight: 500;
+        }
+
+        /* Search Bar - Enhanced */
+        .search-container {
+            flex: 1;
+            max-width: 600px;
+            position: relative;
+        }
+
+        .search-wrapper {
+            position: relative;
+            display: flex;
+            align-items: center;
+        }
+
+        .search-icon {
+            position: absolute;
+            left: var(--spacing-md);
+            color: var(--gray-400);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .search-input {
+            width: 100%;
+            padding: var(--spacing-sm) var(--spacing-md) var(--spacing-sm) calc(var(--spacing-md) * 3);
+            font-size: 1rem;
+            border: 2px solid var(--gray-200);
+            border-radius: var(--radius-full);
+            background: white;
+            transition: all var(--transition-base);
+            outline: none;
+        }
+
+        .search-input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(124, 58, 237, 0.1);
+        }
+
+        .search-input::placeholder {
+            color: var(--gray-400);
+        }
+
+        .search-suggestions {
+            position: absolute;
+            top: calc(100% + var(--spacing-xs));
+            left: 0;
+            right: 0;
+            background: white;
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            max-height: 400px;
+            overflow-y: auto;
+            display: none;
+            z-index: 10;
+        }
+
+        .search-suggestions.active {
+            display: block;
+        }
+
+        .suggestion-item {
+            padding: var(--spacing-sm) var(--spacing-md);
+            cursor: pointer;
+            transition: background var(--transition-fast);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .suggestion-item:hover {
+            background: var(--gray-50);
+        }
+
+        .suggestion-category {
+            font-size: 0.75rem;
+            padding: var(--spacing-xs) var(--spacing-sm);
+            background: var(--primary);
+            color: white;
+            border-radius: var(--radius-sm);
+        }
+
+        /* Action Buttons - Improved */
+        .header-actions {
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-sm);
+        }
+
+        .btn {
+            padding: var(--spacing-sm) var(--spacing-md);
+            border-radius: var(--radius-md);
+            border: none;
+            font-size: 0.875rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            display: inline-flex;
+            align-items: center;
+            gap: var(--spacing-xs);
+            text-decoration: none;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            width: 0;
+            height: 0;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.5);
+            transform: translate(-50%, -50%);
+            transition: width 0.6s, height 0.6s;
+        }
+
+        .btn:active::before {
+            width: 300px;
+            height: 300px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: var(--gray-100);
+            color: var(--gray-700);
+        }
+
+        .btn-secondary:hover {
+            background: var(--gray-200);
+        }
+
+        .btn-ghost {
+            background: transparent;
+            color: var(--gray-700);
+        }
+
+        .btn-ghost:hover {
+            background: var(--gray-100);
+        }
+
+        .btn-icon {
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: var(--radius-full);
+        }
+
+        /* Main Content */
+        .main-container {
+            max-width: 1400px;
+            margin: var(--spacing-xl) auto;
+            padding: 0 var(--spacing-lg);
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Stats Bar */
+        .stats-bar {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: var(--spacing-md);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .stat-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            padding: var(--spacing-md);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            transition: all var(--transition-base);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-icon {
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+        }
+
+        .stat-content {
+            flex: 1;
+        }
+
+        .stat-label {
+            font-size: 0.75rem;
+            color: var(--gray-500);
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--gray-900);
+        }
+
+        /* Categories Grid - Enhanced */
+        .categories-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: var(--spacing-lg);
+            margin-bottom: var(--spacing-xl);
+        }
+
+        .category-card {
+            background: rgba(255, 255, 255, 0.98);
+            backdrop-filter: blur(10px);
+            border-radius: var(--radius-xl);
+            overflow: hidden;
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-base);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .category-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transition: transform var(--transition-base);
+        }
+
+        .category-card:hover {
+            transform: translateY(-4px);
+            box-shadow: var(--shadow-xl);
+        }
+
+        .category-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .category-header {
+            padding: var(--spacing-lg);
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+        }
+
+        .category-icon {
+            width: 56px;
+            height: 56px;
+            background: linear-gradient(135deg, var(--primary-light), var(--primary));
+            border-radius: var(--radius-lg);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .category-info {
+            flex: 1;
+        }
+
+        .category-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--gray-900);
+            margin-bottom: var(--spacing-xs);
+        }
+
+        .category-description {
+            font-size: 0.875rem;
+            color: var(--gray-600);
+            line-height: 1.4;
+        }
+
+        .category-count {
+            font-size: 0.75rem;
+            font-weight: 600;
+            color: white;
+            background: var(--primary);
+            padding: var(--spacing-xs) var(--spacing-sm);
+            border-radius: var(--radius-full);
+            position: absolute;
+            top: var(--spacing-md);
+            right: var(--spacing-md);
+        }
+
+        .category-packages {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height var(--transition-slow);
+            background: var(--gray-50);
+        }
+
+        .category-card.expanded .category-packages {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .package-item {
+            padding: var(--spacing-sm) var(--spacing-lg);
+            border-bottom: 1px solid var(--gray-200);
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: var(--spacing-md);
+            transition: background var(--transition-fast);
+        }
+
+        .package-item:hover {
+            background: white;
+        }
+
+        .package-info {
+            flex: 1;
+        }
+
+        .package-name {
+            font-weight: 600;
+            color: var(--gray-900);
+            margin-bottom: 2px;
+        }
+
+        .package-desc {
+            font-size: 0.75rem;
+            color: var(--gray-600);
+        }
+
+        .package-actions {
+            display: flex;
+            gap: var(--spacing-xs);
+        }
+
+        .install-btn {
+            padding: var(--spacing-xs) var(--spacing-sm);
+            font-size: 0.75rem;
+            background: var(--success);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            cursor: pointer;
+            transition: all var(--transition-fast);
+            font-weight: 600;
+        }
+
+        .install-btn:hover {
+            background: var(--success);
+            transform: scale(1.05);
+        }
+
+        .install-btn.installed {
+            background: var(--gray-300);
+            cursor: default;
+        }
+
+        /* Loading State */
+        .loading {
+            display: inline-block;
+            width: 16px;
+            height: 16px;
+            border: 2px solid var(--gray-300);
+            border-radius: 50%;
+            border-top-color: var(--primary);
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Toast Notifications */
+        .toast-container {
+            position: fixed;
+            bottom: var(--spacing-lg);
+            right: var(--spacing-lg);
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+
+        .toast {
+            background: white;
+            padding: var(--spacing-md) var(--spacing-lg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-xl);
+            min-width: 300px;
+            display: flex;
+            align-items: center;
+            gap: var(--spacing-md);
+            animation: slideInRight 0.3s;
+        }
+
+        @keyframes slideInRight {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+
+        .toast-success {
+            border-left: 4px solid var(--success);
+        }
+
+        .toast-error {
+            border-left: 4px solid var(--danger);
+        }
+
+        .toast-info {
+            border-left: 4px solid var(--info);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                gap: var(--spacing-md);
+            }
+
+            .search-container {
+                width: 100%;
+            }
+
+            .categories-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-bar {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 480px) {
+            .stats-bar {
+                grid-template-columns: 1fr;
+            }
+
+            .header-actions {
+                width: 100%;
+                justify-content: stretch;
+            }
+
+            .btn {
+                flex: 1;
+                justify-content: center;
+            }
+        }
+
+        /* Accessibility - Focus Styles */
+        *:focus-visible {
+            outline: 2px solid var(--primary);
+            outline-offset: 2px;
+        }
+
+        /* Dark Mode Support */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+            }
+
+            header {
+                background: rgba(17, 24, 39, 0.98);
+            }
+
+            .search-input {
+                background: var(--gray-800);
+                border-color: var(--gray-700);
+                color: var(--gray-100);
+            }
+
+            .category-card,
+            .stat-card {
+                background: rgba(31, 41, 55, 0.98);
+            }
+
+            .category-name,
+            .stat-value,
+            .package-name {
+                color: var(--gray-100);
+            }
+
+            .category-description,
+            .package-desc {
+                color: var(--gray-400);
+            }
+
+            .category-packages {
+                background: var(--gray-800);
+            }
+
+            .package-item:hover {
+                background: var(--gray-700);
+            }
+        }
+
+        /* Print Styles */
+        @media print {
+            .background-animation,
+            .header-actions,
+            .search-container {
+                display: none;
+            }
+
+            body {
+                background: white;
+            }
+
+            .category-card {
+                page-break-inside: avoid;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Accessibility Skip Link -->
+    <a href="#main-content" class="skip-to-content">Skip to main content</a>
+
+    <!-- Animated Background -->
+    <div class="background-animation" aria-hidden="true">
+        <div class="gradient-orb"></div>
+        <div class="gradient-orb"></div>
+        <div class="gradient-orb"></div>
+    </div>
+
+    <!-- Header -->
+    <header role="banner">
+        <div class="header-container">
+            <div class="logo-section">
+                <div class="logo" aria-label="Nixite logo">N</div>
+                <div>
+                    <h1>Nixite</h1>
+                    <p class="tagline">Visual NixOS Discovery</p>
+                </div>
+            </div>
+
+            <div class="search-container" role="search">
+                <div class="search-wrapper">
+                    <span class="search-icon" aria-hidden="true">🔍</span>
+                    <input 
+                        type="search" 
+                        class="search-input" 
+                        placeholder="Search packages... (e.g., 'text editor', 'photo editing')"
+                        aria-label="Search for NixOS packages"
+                        autocomplete="off"
+                        id="searchInput"
+                    >
+                </div>
+                <div class="search-suggestions" id="searchSuggestions" role="listbox"></div>
+            </div>
+
+            <div class="header-actions">
+                <button class="btn btn-ghost btn-icon" aria-label="Toggle dark mode" id="themeToggle">
+                    🌙
+                </button>
+                <button class="btn btn-secondary" id="aiSuggestBtn">
+                    ✨ AI Suggest
+                </button>
+                <button class="btn btn-primary" id="loginBtn">
+                    👤 Login
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main id="main-content" class="main-container">
+        <!-- Statistics Bar -->
+        <div class="stats-bar">
+            <div class="stat-card">
+                <div class="stat-icon">📦</div>
+                <div class="stat-content">
+                    <div class="stat-label">Total Packages</div>
+                    <div class="stat-value" id="totalPackages">200+</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">✅</div>
+                <div class="stat-content">
+                    <div class="stat-label">Installed</div>
+                    <div class="stat-value" id="installedCount">0</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">🎯</div>
+                <div class="stat-content">
+                    <div class="stat-label">Coverage</div>
+                    <div class="stat-value">99%</div>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon">👥</div>
+                <div class="stat-content">
+                    <div class="stat-label">Active Users</div>
+                    <div class="stat-value" id="activeUsers">1,234</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Categories Grid -->
+        <div class="categories-grid" id="categoriesGrid">
+            <!-- Categories will be dynamically loaded -->
+        </div>
+
+        <!-- Quick Actions -->
+        <div style="margin-top: var(--spacing-xl); text-align: center;">
+            <h2 style="color: white; margin-bottom: var(--spacing-md);">Quick Actions</h2>
+            <div style="display: flex; gap: var(--spacing-md); justify-content: center; flex-wrap: wrap;">
+                <button class="btn btn-primary" onclick="showProfiles()">
+                    📋 Browse Profiles
+                </button>
+                <button class="btn btn-primary" onclick="showPopular()">
+                    🔥 Popular Packages
+                </button>
+                <button class="btn btn-primary" onclick="showRecent()">
+                    🆕 Recently Added
+                </button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast Container -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <script>
+        // API Configuration
+        const API_BASE = 'http://localhost:8888/api';
+        
+        // State Management
+        const state = {
+            user: null,
+            installedPackages: new Set(),
+            categories: [],
+            packages: [],
+            searchResults: [],
+            theme: localStorage.getItem('theme') || 'light'
+        };
+
+        // Initialize categories with enhanced data
+        const categories = [
+            {
+                id: 'create',
+                name: 'Create',
+                icon: '🎨',
+                description: 'Graphics, video, audio, and creative tools',
+                color: '#ec4899',
+                packages: []
+            },
+            {
+                id: 'connect',
+                name: 'Connect',
+                icon: '💬',
+                description: 'Communication and social tools',
+                color: '#06b6d4',
+                packages: []
+            },
+            {
+                id: 'grow',
+                name: 'Grow',
+                icon: '🌱',
+                description: 'Learning and personal development',
+                color: '#10b981',
+                packages: []
+            },
+            {
+                id: 'work',
+                name: 'Work',
+                icon: '💼',
+                description: 'Productivity and development tools',
+                color: '#3b82f6',
+                packages: []
+            },
+            {
+                id: 'play',
+                name: 'Play',
+                icon: '🎮',
+                description: 'Games and entertainment',
+                color: '#f59e0b',
+                packages: []
+            },
+            {
+                id: 'secure',
+                name: 'Secure',
+                icon: '🔐',
+                description: 'Security and privacy tools',
+                color: '#8b5cf6',
+                packages: []
+            },
+            {
+                id: 'manage',
+                name: 'Manage',
+                icon: '📊',
+                description: 'System and file management',
+                color: '#ef4444',
+                packages: []
+            },
+            {
+                id: 'serve',
+                name: 'Serve',
+                icon: '🌐',
+                description: 'Servers and network services',
+                color: '#14b8a6',
+                packages: []
+            }
+        ];
+
+        // Load packages data
+        async function loadPackages() {
+            try {
+                const response = await fetch('nixite-packages.json');
+                const data = await response.json();
+                state.packages = data.packages;
+                
+                // Organize packages by category
+                categories.forEach(cat => {
+                    cat.packages = state.packages.filter(pkg => pkg.category === cat.id);
+                });
+                
+                renderCategories();
+            } catch (error) {
+                console.error('Failed to load packages:', error);
+                showToast('Failed to load packages', 'error');
+            }
+        }
+
+        // Render categories
+        function renderCategories() {
+            const grid = document.getElementById('categoriesGrid');
+            grid.innerHTML = categories.map(cat => `
+                <div class="category-card" onclick="toggleCategory('${cat.id}')" id="cat-${cat.id}">
+                    <div class="category-count">${cat.packages.length}</div>
+                    <div class="category-header">
+                        <div class="category-icon" style="background: linear-gradient(135deg, ${cat.color}88, ${cat.color});">
+                            ${cat.icon}
+                        </div>
+                        <div class="category-info">
+                            <h3 class="category-name">${cat.name}</h3>
+                            <p class="category-description">${cat.description}</p>
+                        </div>
+                    </div>
+                    <div class="category-packages" id="packages-${cat.id}">
+                        ${cat.packages.slice(0, 10).map(pkg => renderPackage(pkg)).join('')}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Render individual package
+        function renderPackage(pkg) {
+            const isInstalled = state.installedPackages.has(pkg.id);
+            return `
+                <div class="package-item">
+                    <div class="package-info">
+                        <div class="package-name">${pkg.name}</div>
+                        <div class="package-desc">${pkg.description}</div>
+                    </div>
+                    <div class="package-actions">
+                        <button 
+                            class="install-btn ${isInstalled ? 'installed' : ''}"
+                            onclick="installPackage('${pkg.id}')"
+                            ${isInstalled ? 'disabled' : ''}
+                        >
+                            ${isInstalled ? '✓ Installed' : 'Install'}
+                        </button>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Toggle category expansion
+        function toggleCategory(categoryId) {
+            const card = document.getElementById(`cat-${categoryId}`);
+            card.classList.toggle('expanded');
+        }
+
+        // Install package - NOW ACTUALLY INSTALLS ON NIXOS!
+        async function installPackage(packageId) {
+            const pkg = state.packages.find(p => p.id === packageId);
+            if (!pkg) return;
+
+            // Check if already installed
+            if (state.installedPackages.has(packageId)) {
+                showToast(`${pkg.name} is already installed!`, 'info');
+                return;
+            }
+
+            // Show installing status
+            showToast(`Installing ${pkg.name}...`, 'info');
+            
+            try {
+                // Try Luminous Nix bridge first for AI-powered installation
+                let installEndpoint = 'http://localhost:8889/install';
+                let checkEndpoint = 'http://localhost:8889/check';
+                let usedBridge = false;
+                
+                try {
+                    // Check if Luminous bridge is available
+                    const bridgeHealth = await fetch('http://localhost:8890/health', { 
+                        signal: AbortSignal.timeout(500) 
+                    });
+                    
+                    if (bridgeHealth.ok) {
+                        installEndpoint = 'http://localhost:8890/install';
+                        usedBridge = true;
+                        console.log('Using Luminous Nix AI bridge for intelligent installation');
+                    }
+                } catch (err) {
+                    console.log('Using direct installer (Luminous bridge not available)');
+                }
+                
+                // Check if already installed (skip for bridge as it handles this)
+                if (!usedBridge) {
+                    const checkResponse = await fetch(checkEndpoint, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ package: packageId })
+                    });
+                    
+                    const checkResult = await checkResponse.json();
+                    
+                    if (checkResult.installed) {
+                        state.installedPackages.add(packageId);
+                        updateInstalledCount();
+                        renderCategories();
+                        showToast(`${pkg.name} is already installed on your system!`, 'success');
+                        return;
+                    }
+                }
+                
+                // Install the package (with AI if bridge available)
+                const installResponse = await fetch(installEndpoint, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ 
+                        package: packageId,
+                        options: usedBridge ? {
+                            user_profile: state.user?.profile || 'general',
+                            prefer_gui: true,
+                            smart_dependencies: true
+                        } : undefined
+                    })
+                });
+                
+                const result = await installResponse.json();
+                
+                if (result.success) {
+                    state.installedPackages.add(packageId);
+                    updateInstalledCount();
+                    renderCategories();
+                    
+                    // Show success with timing
+                    const duration = (result.duration / 1000).toFixed(1);
+                    showToast(`✅ ${pkg.name} installed successfully in ${duration}s!`, 'success');
+                    
+                    // Save installation state to backend API for persistence
+                    if (state.user) {
+                        fetch(`${API_BASE}/install`, {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Authorization': `Bearer ${state.user.token}`
+                            },
+                            body: JSON.stringify({
+                                userId: state.user.id,
+                                packageId: packageId,
+                                installedAs: result.installedAs
+                            })
+                        }).catch(err => console.error('Could not persist to backend:', err));
+                    }
+                } else {
+                    showToast(`Installation failed: ${result.error || 'Unknown error'}`, 'error');
+                }
+            } catch (error) {
+                console.error('Installation error:', error);
+                showToast('Installation failed', 'error');
+            }
+        }
+
+        // Update installed count
+        function updateInstalledCount() {
+            document.getElementById('installedCount').textContent = state.installedPackages.size;
+        }
+
+        // Show toast notification
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toastContainer');
+            const toast = document.createElement('div');
+            toast.className = `toast toast-${type}`;
+            toast.innerHTML = `
+                <span>${type === 'success' ? '✅' : type === 'error' ? '❌' : 'ℹ️'}</span>
+                <span>${message}</span>
+            `;
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.style.animation = 'slideInRight 0.3s reverse';
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
+        }
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            const query = e.target.value.toLowerCase();
+            if (query.length < 2) {
+                document.getElementById('searchSuggestions').classList.remove('active');
+                return;
+            }
+
+            const results = state.packages.filter(pkg => 
+                pkg.name.toLowerCase().includes(query) ||
+                pkg.description.toLowerCase().includes(query)
+            ).slice(0, 10);
+
+            const suggestions = document.getElementById('searchSuggestions');
+            suggestions.innerHTML = results.map(pkg => `
+                <div class="suggestion-item" onclick="selectPackage('${pkg.id}')">
+                    <span>${pkg.name}</span>
+                    <span class="suggestion-category">${pkg.category}</span>
+                </div>
+            `).join('');
+            
+            suggestions.classList.add('active');
+        });
+
+        // Theme toggle
+        document.getElementById('themeToggle').addEventListener('click', () => {
+            state.theme = state.theme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', state.theme);
+            localStorage.setItem('theme', state.theme);
+            document.getElementById('themeToggle').textContent = state.theme === 'light' ? '🌙' : '☀️';
+        });
+
+        // Header scroll effect
+        let lastScroll = 0;
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            const currentScroll = window.pageYOffset;
+            
+            if (currentScroll > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+            
+            lastScroll = currentScroll;
+        });
+
+        // Quick action functions
+        function showProfiles() {
+            showToast('Loading profiles...', 'info');
+        }
+
+        function showPopular() {
+            showToast('Loading popular packages...', 'info');
+        }
+
+        function showRecent() {
+            showToast('Loading recent packages...', 'info');
+        }
+
+        function selectPackage(packageId) {
+            const pkg = state.packages.find(p => p.id === packageId);
+            if (pkg) {
+                const categoryCard = document.getElementById(`cat-${pkg.category}`);
+                if (categoryCard) {
+                    categoryCard.classList.add('expanded');
+                    categoryCard.scrollIntoView({ behavior: 'smooth' });
+                    showToast(`Showing ${pkg.name}`, 'info');
+                }
+            }
+            document.getElementById('searchSuggestions').classList.remove('active');
+            document.getElementById('searchInput').value = '';
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPackages();
+            
+            // Apply saved theme
+            document.documentElement.setAttribute('data-theme', state.theme);
+            document.getElementById('themeToggle').textContent = state.theme === 'light' ? '🌙' : '☀️';
+            
+            // Check for saved user session
+            const savedUser = localStorage.getItem('nixite_user');
+            if (savedUser) {
+                state.user = JSON.parse(savedUser);
+                document.getElementById('loginBtn').textContent = `👤 ${state.user.username}`;
+            }
+        });
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === '/' && document.activeElement.tagName !== 'INPUT') {
+                e.preventDefault();
+                document.getElementById('searchInput').focus();
+            }
+            
+            if (e.key === 'Escape') {
+                document.getElementById('searchSuggestions').classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
