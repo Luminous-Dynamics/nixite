@@ -1,0 +1,55 @@
+# Nixite systemd service file
+# This allows Nixite to run as a system service
+#
+# Installation:
+#   1. Copy this file to /etc/systemd/system/nixite.service
+#   2. Update the paths below to match your installation
+#   3. Run: sudo systemctl daemon-reload
+#   4. Run: sudo systemctl enable nixite
+#   5. Run: sudo systemctl start nixite
+#
+# Usage:
+#   sudo systemctl status nixite   # Check status
+#   sudo systemctl restart nixite  # Restart service
+#   sudo systemctl stop nixite     # Stop service
+#   journalctl -u nixite -f        # View logs
+
+[Unit]
+Description=Nixite - Visual Package Discovery for NixOS
+Documentation=https://github.com/Luminous-Dynamics/nixite
+After=network.target
+
+[Service]
+Type=simple
+User=nixite
+Group=nixite
+WorkingDirectory=/opt/nixite
+
+# Web server (Python HTTP server on port 8000)
+ExecStart=/usr/bin/python3 -m http.server 8000
+
+# Alternative: Use the start.sh script to launch both web and AI bridge
+# ExecStart=/opt/nixite/start.sh
+
+# Restart policy
+Restart=on-failure
+RestartSec=10s
+
+# Security hardening
+NoNewPrivileges=true
+PrivateTmp=true
+ProtectSystem=strict
+ProtectHome=true
+ReadWritePaths=/opt/nixite
+
+# Resource limits
+MemoryLimit=512M
+CPUQuota=50%
+
+# Logging
+StandardOutput=journal
+StandardError=journal
+SyslogIdentifier=nixite
+
+[Install]
+WantedBy=multi-user.target

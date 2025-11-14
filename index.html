@@ -991,22 +991,52 @@
             }
         ];
 
-        // Load packages data
+        // Load packages data with improved error handling
         async function loadPackages() {
             try {
                 const response = await fetch('nixite-packages.json');
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
                 const data = await response.json();
+
+                // Validate data structure
+                if (!data || !Array.isArray(data.packages)) {
+                    throw new Error('Invalid package data structure');
+                }
+
                 state.packages = data.packages;
-                
+
                 // Organize packages by category
                 categories.forEach(cat => {
                     cat.packages = state.packages.filter(pkg => pkg.category === cat.id);
                 });
-                
+
                 renderCategories();
+
+                // Update total package count
+                const totalPackages = state.packages.length;
+                document.getElementById('totalPackages').textContent = totalPackages;
+
             } catch (error) {
                 console.error('Failed to load packages:', error);
-                showToast('Failed to load packages', 'error');
+                showToast(`Failed to load packages: ${error.message}`, 'error');
+
+                // Show user-friendly error in the grid
+                const grid = document.getElementById('categoriesGrid');
+                grid.innerHTML = `
+                    <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
+                        <h3 style="color: var(--danger); margin-bottom: 10px;">❌ Failed to Load Packages</h3>
+                        <p style="color: var(--gray-600); margin-bottom: 20px;">
+                            ${error.message || 'Unknown error occurred'}
+                        </p>
+                        <button class="btn btn-primary" onclick="loadPackages()">
+                            🔄 Retry
+                        </button>
+                    </div>
+                `;
             }
         }
 
@@ -1063,7 +1093,10 @@
         // Install package - NOW ACTUALLY INSTALLS ON NIXOS!
         async function installPackage(packageId) {
             const pkg = state.packages.find(p => p.id === packageId);
-            if (!pkg) return;
+            if (!pkg) {
+                showToast('Package not found', 'error');
+                return;
+            }
 
             // Check if already installed
             if (state.installedPackages.has(packageId)) {
@@ -1073,6 +1106,11 @@
 
             // Show installing status
             showToast(`Installing ${pkg.name}...`, 'info');
+
+            // Get timeout from config or use default
+            const timeout = (typeof NIXITE_CONFIG !== 'undefined')
+                ? NIXITE_CONFIG.network.timeout
+                : 30000;
             
             try {
                 // Try Luminous Nix bridge first for AI-powered installation
@@ -1159,7 +1197,26 @@
                 }
             } catch (error) {
                 console.error('Installation error:', error);
-                showToast('Installation failed', 'error');
+
+                // Provide user-friendly error messages
+                let errorMessage = 'Installation failed';
+
+                if (error.name === 'TypeError' && error.message.includes('fetch')) {
+                    errorMessage = 'Cannot connect to installation service. Please ensure the backend is running.';
+                } else if (error.name === 'AbortError') {
+                    errorMessage = 'Installation timed out. The package server may be slow or unavailable.';
+                } else if (error.message) {
+                    errorMessage = `Installation failed: ${error.message}`;
+                }
+
+                showToast(errorMessage, 'error');
+
+                // Show helpful tip if bridge isn't available
+                if (errorMessage.includes('connect')) {
+                    setTimeout(() => {
+                        showToast('Tip: You can install packages manually using: nix-env -iA nixos.' + packageId, 'info');
+                    }, 2000);
+                }
             }
         }
 
