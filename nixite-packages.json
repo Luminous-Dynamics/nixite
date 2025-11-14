@@ -1,0 +1,424 @@
+{
+  "packages": [
+    {
+      "id": "firefox",
+      "name": "Firefox",
+      "description": "Fast, private web browser from Mozilla",
+      "category": "connect"
+    },
+    {
+      "id": "chromium",
+      "name": "Chromium",
+      "description": "Open-source web browser",
+      "category": "connect"
+    },
+    {
+      "id": "brave",
+      "name": "Brave Browser",
+      "description": "Privacy-focused browser with ad blocking",
+      "category": "connect"
+    },
+    {
+      "id": "thunderbird",
+      "name": "Thunderbird",
+      "description": "Full-featured email client",
+      "category": "connect"
+    },
+    {
+      "id": "discord",
+      "name": "Discord",
+      "description": "Voice, video, and text chat platform",
+      "category": "connect"
+    },
+    {
+      "id": "slack",
+      "name": "Slack",
+      "description": "Team collaboration and messaging",
+      "category": "connect"
+    },
+    {
+      "id": "signal-desktop",
+      "name": "Signal",
+      "description": "Secure messaging with end-to-end encryption",
+      "category": "connect"
+    },
+    {
+      "id": "telegram-desktop",
+      "name": "Telegram",
+      "description": "Cloud-based instant messaging",
+      "category": "connect"
+    },
+    {
+      "id": "zoom-us",
+      "name": "Zoom",
+      "description": "Video conferencing platform",
+      "category": "connect"
+    },
+    {
+      "id": "teams",
+      "name": "Microsoft Teams",
+      "description": "Business communication platform",
+      "category": "connect"
+    },
+    {
+      "id": "gimp",
+      "name": "GIMP",
+      "description": "Advanced image editor (Photoshop alternative)",
+      "category": "create"
+    },
+    {
+      "id": "inkscape",
+      "name": "Inkscape",
+      "description": "Vector graphics editor",
+      "category": "create"
+    },
+    {
+      "id": "krita",
+      "name": "Krita",
+      "description": "Digital painting and illustration",
+      "category": "create"
+    },
+    {
+      "id": "blender",
+      "name": "Blender",
+      "description": "3D creation suite for modeling, animation, and rendering",
+      "category": "create"
+    },
+    {
+      "id": "kdenlive",
+      "name": "Kdenlive",
+      "description": "Professional video editing software",
+      "category": "create"
+    },
+    {
+      "id": "obs-studio",
+      "name": "OBS Studio",
+      "description": "Streaming and recording software",
+      "category": "create"
+    },
+    {
+      "id": "audacity",
+      "name": "Audacity",
+      "description": "Audio recording and editing",
+      "category": "create"
+    },
+    {
+      "id": "darktable",
+      "name": "Darktable",
+      "description": "Photography workflow and RAW developer",
+      "category": "create"
+    },
+    {
+      "id": "ardour",
+      "name": "Ardour",
+      "description": "Digital audio workstation",
+      "category": "create"
+    },
+    {
+      "id": "freecad",
+      "name": "FreeCAD",
+      "description": "Parametric 3D CAD modeler",
+      "category": "create"
+    },
+    {
+      "id": "libreoffice",
+      "name": "LibreOffice",
+      "description": "Complete office suite (Writer, Calc, Impress)",
+      "category": "work"
+    },
+    {
+      "id": "vscode",
+      "name": "VS Code",
+      "description": "Modern code editor with extensions",
+      "category": "work"
+    },
+    {
+      "id": "git",
+      "name": "Git",
+      "description": "Version control system",
+      "category": "work"
+    },
+    {
+      "id": "docker",
+      "name": "Docker",
+      "description": "Container platform for applications",
+      "category": "work"
+    },
+    {
+      "id": "neovim",
+      "name": "Neovim",
+      "description": "Hyperextensible Vim-based text editor",
+      "category": "work"
+    },
+    {
+      "id": "emacs",
+      "name": "Emacs",
+      "description": "Extensible, customizable text editor",
+      "category": "work"
+    },
+    {
+      "id": "nodejs",
+      "name": "Node.js",
+      "description": "JavaScript runtime",
+      "category": "work"
+    },
+    {
+      "id": "python3",
+      "name": "Python 3",
+      "description": "Python programming language",
+      "category": "work"
+    },
+    {
+      "id": "rustc",
+      "name": "Rust",
+      "description": "Systems programming language",
+      "category": "work"
+    },
+    {
+      "id": "go",
+      "name": "Go",
+      "description": "Google's programming language",
+      "category": "work"
+    },
+    {
+      "id": "steam",
+      "name": "Steam",
+      "description": "PC gaming platform and library",
+      "category": "play"
+    },
+    {
+      "id": "lutris",
+      "name": "Lutris",
+      "description": "Open gaming platform",
+      "category": "play"
+    },
+    {
+      "id": "minecraft",
+      "name": "Minecraft",
+      "description": "Sandbox video game",
+      "category": "play"
+    },
+    {
+      "id": "retroarch",
+      "name": "RetroArch",
+      "description": "Retro gaming emulator frontend",
+      "category": "play"
+    },
+    {
+      "id": "vlc",
+      "name": "VLC",
+      "description": "Versatile media player",
+      "category": "play"
+    },
+    {
+      "id": "mpv",
+      "name": "mpv",
+      "description": "Minimalist media player",
+      "category": "play"
+    },
+    {
+      "id": "spotify",
+      "name": "Spotify",
+      "description": "Music streaming service",
+      "category": "play"
+    },
+    {
+      "id": "wine",
+      "name": "Wine",
+      "description": "Run Windows applications on Linux",
+      "category": "play"
+    },
+    {
+      "id": "anki",
+      "name": "Anki",
+      "description": "Flashcard-based learning system",
+      "category": "grow"
+    },
+    {
+      "id": "calibre",
+      "name": "Calibre",
+      "description": "E-book library management",
+      "category": "grow"
+    },
+    {
+      "id": "zotero",
+      "name": "Zotero",
+      "description": "Research reference manager",
+      "category": "grow"
+    },
+    {
+      "id": "obsidian",
+      "name": "Obsidian",
+      "description": "Knowledge base and note-taking",
+      "category": "grow"
+    },
+    {
+      "id": "joplin",
+      "name": "Joplin",
+      "description": "Open-source note taking and to-do app",
+      "category": "grow"
+    },
+    {
+      "id": "stellarium",
+      "name": "Stellarium",
+      "description": "Planetarium software",
+      "category": "grow"
+    },
+    {
+      "id": "geogebra",
+      "name": "GeoGebra",
+      "description": "Interactive mathematics software",
+      "category": "grow"
+    },
+    {
+      "id": "ktouch",
+      "name": "KTouch",
+      "description": "Touch typing tutor",
+      "category": "grow"
+    },
+    {
+      "id": "keepassxc",
+      "name": "KeePassXC",
+      "description": "Secure password manager",
+      "category": "secure"
+    },
+    {
+      "id": "bitwarden",
+      "name": "Bitwarden",
+      "description": "Cloud-based password manager",
+      "category": "secure"
+    },
+    {
+      "id": "wireguard",
+      "name": "WireGuard",
+      "description": "Modern, fast VPN",
+      "category": "secure"
+    },
+    {
+      "id": "openvpn",
+      "name": "OpenVPN",
+      "description": "Secure VPN solution",
+      "category": "secure"
+    },
+    {
+      "id": "tor-browser-bundle",
+      "name": "Tor Browser",
+      "description": "Anonymous web browsing",
+      "category": "secure"
+    },
+    {
+      "id": "veracrypt",
+      "name": "VeraCrypt",
+      "description": "Disk encryption software",
+      "category": "secure"
+    },
+    {
+      "id": "firejail",
+      "name": "Firejail",
+      "description": "Application sandboxing",
+      "category": "secure"
+    },
+    {
+      "id": "clamav",
+      "name": "ClamAV",
+      "description": "Antivirus engine",
+      "category": "secure"
+    },
+    {
+      "id": "htop",
+      "name": "htop",
+      "description": "Interactive process viewer",
+      "category": "manage"
+    },
+    {
+      "id": "btop",
+      "name": "btop",
+      "description": "Modern resource monitor",
+      "category": "manage"
+    },
+    {
+      "id": "ncdu",
+      "name": "ncdu",
+      "description": "Disk usage analyzer",
+      "category": "manage"
+    },
+    {
+      "id": "rsync",
+      "name": "rsync",
+      "description": "Fast file copying and syncing",
+      "category": "manage"
+    },
+    {
+      "id": "syncthing",
+      "name": "Syncthing",
+      "description": "Continuous file synchronization",
+      "category": "manage"
+    },
+    {
+      "id": "p7zip",
+      "name": "7-Zip",
+      "description": "File archiver with high compression",
+      "category": "manage"
+    },
+    {
+      "id": "gnome-disk-utility",
+      "name": "Disks",
+      "description": "Disk management utility",
+      "category": "manage"
+    },
+    {
+      "id": "timeshift",
+      "name": "Timeshift",
+      "description": "System backup and restore",
+      "category": "manage"
+    },
+    {
+      "id": "nginx",
+      "name": "nginx",
+      "description": "High-performance web server",
+      "category": "serve"
+    },
+    {
+      "id": "apache",
+      "name": "Apache",
+      "description": "Popular web server",
+      "category": "serve"
+    },
+    {
+      "id": "postgresql",
+      "name": "PostgreSQL",
+      "description": "Advanced relational database",
+      "category": "serve"
+    },
+    {
+      "id": "mysql",
+      "name": "MySQL",
+      "description": "Popular database server",
+      "category": "serve"
+    },
+    {
+      "id": "redis",
+      "name": "Redis",
+      "description": "In-memory data store",
+      "category": "serve"
+    },
+    {
+      "id": "mongodb",
+      "name": "MongoDB",
+      "description": "NoSQL document database",
+      "category": "serve"
+    },
+    {
+      "id": "samba",
+      "name": "Samba",
+      "description": "File and print services",
+      "category": "serve"
+    },
+    {
+      "id": "nextcloud",
+      "name": "Nextcloud",
+      "description": "Self-hosted cloud platform",
+      "category": "serve"
+    }
+  ]
+}

@@ -1,0 +1,34 @@
+{
+  "name": "nixite",
+  "version": "2.0.0",
+  "description": "Visual Package Discovery for NixOS - Making NixOS accessible to everyone",
+  "main": "nixite-luminous-bridge.js",
+  "scripts": {
+    "start": "node nixite-luminous-bridge.js",
+    "bridge": "node nixite-luminous-bridge.js",
+    "dev": "python3 -m http.server 8000",
+    "serve": "python3 -m http.server 8000"
+  },
+  "keywords": [
+    "nixos",
+    "nix",
+    "package-manager",
+    "visual-discovery",
+    "accessibility",
+    "ai-powered"
+  ],
+  "author": "Luminous Dynamics",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Luminous-Dynamics/nixite.git"
+  },
+  "homepage": "https://nixite.luminousdynamics.org",
+  "engines": {
+    "node": ">=14.0.0",
+    "npm": ">=6.0.0"
+  },
+  "devDependencies": {},
+  "dependencies": {},
+  "optionalDependencies": {}
+}
