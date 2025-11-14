@@ -1,6 +1,6 @@
 {
   "name": "nixite",
-  "version": "2.0.0",
+  "version": "2.1.0",
   "description": "Visual Package Discovery for NixOS - Making NixOS accessible to everyone",
   "main": "nixite-luminous-bridge.js",
   "scripts": {
