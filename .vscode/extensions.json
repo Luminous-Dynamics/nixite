@@ -1,0 +1,56 @@
+{
+  // Recommended VS Code Extensions for Nixite Development
+  // These extensions enhance the development experience
+
+  "recommendations": [
+    // === Essential ===
+    "esbenp.prettier-vscode",          // Code formatting
+    "dbaeumer.vscode-eslint",          // JavaScript linting
+    "yzhang.markdown-all-in-one",      // Markdown support
+
+    // === Language Support ===
+    "jnoortheen.nix-ide",              // Nix language support
+    "foxundermoon.shell-format",       // Shell script formatting
+    "tamasfe.even-better-toml",        // TOML support
+
+    // === Docker & Deployment ===
+    "ms-azuretools.vscode-docker",     // Docker support
+    "matthewpi.caddyfile-support",     // Caddyfile syntax highlighting
+    "shanoor.vscode-nginx",            // nginx configuration support
+
+    // === Git & Version Control ===
+    "eamodio.gitlens",                 // Enhanced Git features
+    "mhutchie.git-graph",              // Git graph visualization
+
+    // === Productivity ===
+    "aaron-bond.better-comments",      // Enhanced comment highlighting
+    "streetsidesoftware.code-spell-checker", // Spell checking
+    "wayou.vscode-todo-highlight",     // TODO highlighting
+    "gruntfuggly.todo-tree",           // TODO tree view
+
+    // === Testing & Quality ===
+    "orta.vscode-jest",                // Jest testing support
+    "hbenl.vscode-test-explorer",      // Test explorer
+
+    // === Utilities ===
+    "christian-kohler.path-intellisense", // Path autocompletion
+    "visualstudioexptteam.vscodeintellicode", // AI-assisted coding
+    "ms-vscode.live-server",           // Live server for development
+
+    // === Documentation ===
+    "davidanson.vscode-markdownlint",  // Markdown linting
+    "bierner.markdown-mermaid",        // Mermaid diagrams in markdown
+
+    // === Optional but Useful ===
+    "ritwickdey.liveserver",           // Alternative live server
+    "wmaurer.change-case",             // Change case commands
+    "usernamehw.errorlens",            // Inline error messages
+    "oderwat.indent-rainbow"           // Rainbow indentation
+  ],
+
+  // Extensions that are not recommended (may conflict)
+  "unwantedRecommendations": [
+    "hookyqr.beautify",                // Use Prettier instead
+    "ms-vscode.vscode-typescript-tslint-plugin" // Deprecated
+  ]
+}

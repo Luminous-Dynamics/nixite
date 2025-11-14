@@ -1,0 +1,111 @@
+{
+  // Nixite VS Code Launch Configurations
+  // Press F5 to start debugging
+
+  "version": "0.2.0",
+  "configurations": [
+    // ========================================
+    // Node.js Debugging
+    // ========================================
+    {
+      "name": "Debug AI Bridge",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/nixite-luminous-bridge.js",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "env": {
+        "NODE_ENV": "development",
+        "DEBUG": "*"
+      }
+    },
+
+    // ========================================
+    // Test Debugging
+    // ========================================
+    {
+      "name": "Debug Config Tests",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tests/config.test.js",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Debug Package Tests",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/tests/packages.test.js",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+
+    // ========================================
+    // Script Debugging
+    // ========================================
+    {
+      "name": "Debug Config Validator",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/validate-config.js",
+      "args": ["config.js"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Debug Package Validator",
+      "type": "node",
+      "request": "launch",
+      "program": "${workspaceFolder}/scripts/validate-packages.js",
+      "args": ["nixite-packages.json"],
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal"
+    },
+
+    // ========================================
+    // Browser Debugging (requires Chrome)
+    // ========================================
+    {
+      "name": "Debug in Chrome",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:8000",
+      "webRoot": "${workspaceFolder}",
+      "userDataDir": "${workspaceFolder}/.vscode/chrome-debug-profile",
+      "sourceMaps": true,
+      "preLaunchTask": "Start Development Server"
+    },
+
+    // ========================================
+    // Attach Configurations
+    // ========================================
+    {
+      "name": "Attach to AI Bridge",
+      "type": "node",
+      "request": "attach",
+      "port": 9229,
+      "restart": true,
+      "sourceMaps": true
+    }
+  ],
+
+  // ========================================
+  // Compound Configurations
+  // ========================================
+  "compounds": [
+    {
+      "name": "Full Stack Debug",
+      "configurations": [
+        "Debug AI Bridge",
+        "Debug in Chrome"
+      ],
+      "presentation": {
+        "hidden": false,
+        "group": "1-compound",
+        "order": 1
+      },
+      "stopAll": true
+    }
+  ]
+}

@@ -18,7 +18,7 @@ ENV/
 .venv
 
 # IDEs and Editors
-.vscode/
+# .vscode/ is intentionally committed for contributor experience
 .idea/
 *.swp
 *.swo

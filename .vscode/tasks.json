@@ -1,0 +1,254 @@
+{
+  // Nixite VS Code Tasks
+  // Press Ctrl+Shift+B to see available tasks
+
+  "version": "2.0.0",
+  "tasks": [
+    // ========================================
+    // Development Tasks
+    // ========================================
+    {
+      "label": "Start Development Server",
+      "type": "shell",
+      "command": "./scripts/dev.sh start",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "new",
+        "focus": false
+      },
+      "group": {
+        "kind": "build",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Stop Development Server",
+      "type": "shell",
+      "command": "./scripts/dev.sh stop",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Development Setup",
+      "type": "shell",
+      "command": "./scripts/dev.sh setup",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+
+    // ========================================
+    // Testing Tasks
+    // ========================================
+    {
+      "label": "Run All Tests",
+      "type": "shell",
+      "command": "npm test",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "group": {
+        "kind": "test",
+        "isDefault": true
+      }
+    },
+    {
+      "label": "Run Config Tests",
+      "type": "shell",
+      "command": "npm run test:config",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "group": "test"
+    },
+    {
+      "label": "Run Package Tests",
+      "type": "shell",
+      "command": "npm run test:packages",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "group": "test"
+    },
+
+    // ========================================
+    // Validation Tasks
+    // ========================================
+    {
+      "label": "Validate Configuration",
+      "type": "shell",
+      "command": "node scripts/validate-config.js config.js",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Validate Packages",
+      "type": "shell",
+      "command": "node scripts/validate-packages.js nixite-packages.json",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Verify Installation",
+      "type": "shell",
+      "command": "./verify.sh",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+
+    // ========================================
+    // Code Quality Tasks
+    // ========================================
+    {
+      "label": "Lint Code",
+      "type": "shell",
+      "command": "./scripts/dev.sh lint",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Build Project",
+      "type": "shell",
+      "command": "./scripts/dev.sh build",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      },
+      "group": "build"
+    },
+
+    // ========================================
+    // Docker Tasks
+    // ========================================
+    {
+      "label": "Docker: Build",
+      "type": "shell",
+      "command": "./scripts/dev.sh docker build",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Docker: Start with Compose",
+      "type": "shell",
+      "command": "./scripts/dev.sh docker compose",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Docker: Stop",
+      "type": "shell",
+      "command": "./scripts/dev.sh docker down",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Docker: View Logs",
+      "type": "shell",
+      "command": "./scripts/dev.sh logs docker",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+
+    // ========================================
+    // Git Tasks
+    // ========================================
+    {
+      "label": "Install Git Hooks",
+      "type": "shell",
+      "command": "git config core.hooksPath .githooks",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+
+    // ========================================
+    // Utility Tasks
+    // ========================================
+    {
+      "label": "Check Status",
+      "type": "shell",
+      "command": "./scripts/dev.sh status",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+    {
+      "label": "Clean Temporary Files",
+      "type": "shell",
+      "command": "./scripts/dev.sh clean",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+
+    // ========================================
+    // Deployment Tasks
+    // ========================================
+    {
+      "label": "Check Production Readiness",
+      "type": "shell",
+      "command": "./scripts/deploy.sh check",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "always",
+        "panel": "shared"
+      }
+    },
+
+    // ========================================
+    // Documentation Tasks
+    // ========================================
+    {
+      "label": "Open Documentation",
+      "type": "shell",
+      "command": "xdg-open docs/README.md || open docs/README.md || start docs/README.md",
+      "problemMatcher": [],
+      "presentation": {
+        "reveal": "never"
+      }
+    }
+  ]
+}
