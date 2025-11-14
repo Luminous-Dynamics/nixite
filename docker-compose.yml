@@ -1,0 +1,61 @@
+version: '3.8'
+
+services:
+  # Web interface
+  nixite-web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nixite-web
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./nixite-packages.json:/app/nixite-packages.json:ro
+      - ./config.js:/app/config.js:ro
+    environment:
+      - NIXITE_HOST=0.0.0.0
+      - NIXITE_PORT=8000
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 5s
+    restart: unless-stopped
+    networks:
+      - nixite-network
+
+  # AI Bridge (optional)
+  nixite-bridge:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: nixite-bridge
+    command: ["node", "/app/nixite-luminous-bridge.js"]
+    ports:
+      - "8890:8890"
+    volumes:
+      - ./nixite-luminous-bridge.js:/app/nixite-luminous-bridge.js:ro
+      - ./config.js:/app/config.js:ro
+    environment:
+      - NODE_ENV=production
+      - BRIDGE_PORT=8890
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8890/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 10s
+    restart: unless-stopped
+    networks:
+      - nixite-network
+    depends_on:
+      - nixite-web
+
+networks:
+  nixite-network:
+    driver: bridge
+
+volumes:
+  nixite-data:
+    driver: local

@@ -1,0 +1,124 @@
+name: 🐛 Bug Report
+description: Report a bug or issue with Nixite
+title: "[Bug]: "
+labels: ["bug", "triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill out the information below to help us fix it.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of the bug
+      placeholder: When I click on..., I expect... but instead...
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: How can we reproduce this issue?
+      placeholder: |
+        1. Go to...
+        2. Click on...
+        3. See error...
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What should happen?
+      placeholder: The package should install successfully...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+      placeholder: An error message appeared saying...
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Nixite Version
+      description: What version of Nixite are you using?
+      placeholder: "2.0.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: nixos-version
+    attributes:
+      label: NixOS Version
+      description: Which version of NixOS are you running?
+      options:
+        - "23.11 (stable)"
+        - "23.05 (stable)"
+        - "unstable"
+        - "Not using NixOS (Nix on other distro)"
+        - "Other"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Browser
+      description: Which browser are you using?
+      multiple: true
+      options:
+        - Firefox
+        - Chrome
+        - Chromium
+        - Brave
+        - Safari
+        - Edge
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Error Logs
+      description: Please paste any error logs from the browser console
+      placeholder: |
+        Open browser DevTools (F12) → Console tab
+        Copy any error messages here
+      render: shell
+
+  - type: textarea
+    id: screenshots
+    attributes:
+      label: Screenshots
+      description: If applicable, add screenshots to help explain the problem
+
+  - type: textarea
+    id: additional
+    attributes:
+      label: Additional Context
+      description: Any other information that might be helpful
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have searched existing issues to ensure this is not a duplicate
+          required: true
+        - label: I have included all relevant information above
+          required: true
+        - label: I am running the latest version of Nixite
+          required: false

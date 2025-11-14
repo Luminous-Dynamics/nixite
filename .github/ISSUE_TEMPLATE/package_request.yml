@@ -1,0 +1,111 @@
+name: 📦 Package Request
+description: Request a new package to be added to Nixite
+title: "[Package]: "
+labels: ["package-request", "triage"]
+assignees: []
+
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Want to see a package in Nixite? Let us know!
+
+  - type: input
+    id: package-name
+    attributes:
+      label: Package Name
+      description: What is the name of the package?
+      placeholder: firefox, vscode, gimp, etc.
+    validations:
+      required: true
+
+  - type: input
+    id: nixos-name
+    attributes:
+      label: NixOS Package Name
+      description: What is the official NixOS package name (if known)?
+      placeholder: Check on search.nixos.org
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      description: Which category should this package be in?
+      options:
+        - Create (Graphics, video, audio, creative tools)
+        - Connect (Communication and social tools)
+        - Grow (Learning and personal development)
+        - Work (Productivity and development tools)
+        - Play (Games and entertainment)
+        - Secure (Security and privacy tools)
+        - Manage (System and file management)
+        - Serve (Servers and network services)
+        - Not sure
+    validations:
+      required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Package Description
+      description: Provide a brief, user-friendly description (max 100 characters)
+      placeholder: What does this package do? Write it in a way that "Grandma Rose" would understand.
+    validations:
+      required: true
+
+  - type: textarea
+    id: why
+    attributes:
+      label: Why Should This Be Added?
+      description: Why is this package important for Nixite users?
+      placeholder: This package is commonly used for... It would help users who...
+    validations:
+      required: true
+
+  - type: input
+    id: website
+    attributes:
+      label: Official Website
+      description: Link to the official package website
+      placeholder: https://...
+
+  - type: input
+    id: nixos-link
+    attributes:
+      label: NixOS Package Page
+      description: Link to the package on search.nixos.org
+      placeholder: https://search.nixos.org/packages?show=...
+
+  - type: dropdown
+    id: popularity
+    attributes:
+      label: Popularity
+      description: How popular is this package?
+      options:
+        - Very popular (widely used)
+        - Moderately popular
+        - Niche but important
+        - New/emerging
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives
+      description: Are there similar packages already in Nixite?
+      placeholder: Similar to... but different because...
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: This package is available in NixOS
+          required: true
+        - label: I have checked that this package isn't already in Nixite
+          required: true
+        - label: I have provided a clear, user-friendly description
+          required: true
+        - label: I am willing to help test this package
+          required: false

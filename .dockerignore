@@ -1,0 +1,66 @@
+# Git
+.git
+.gitignore
+.github
+
+# Node
+node_modules
+npm-debug.log
+yarn-debug.log
+yarn-error.log
+package-lock.json
+yarn.lock
+
+# Python
+__pycache__
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv
+env
+
+# IDEs
+.vscode
+.idea
+*.swp
+*.swo
+.DS_Store
+
+# Logs
+logs
+*.log
+
+# Temp files
+tmp
+temp
+*.tmp
+*.backup
+*.bak
+
+# Documentation (not needed in container)
+*.md
+!README.md
+CHANGELOG.md
+CONTRIBUTING.md
+CODE_OF_CONDUCT.md
+SECURITY.md
+ROADMAP.md
+PULL_REQUEST_SUMMARY.md
+
+# Development files
+.env
+.env.*
+
+# Build outputs
+dist
+build
+
+# Tests
+tests
+test
+*.test.js
+*.spec.js
+
+# CI/CD
+.github/workflows
