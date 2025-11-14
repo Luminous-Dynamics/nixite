@@ -7,7 +7,11 @@
     "start": "node nixite-luminous-bridge.js",
     "bridge": "node nixite-luminous-bridge.js",
     "dev": "python3 -m http.server 8000",
-    "serve": "python3 -m http.server 8000"
+    "serve": "python3 -m http.server 8000",
+    "test": "node tests/config.test.js && node tests/packages.test.js",
+    "test:config": "node tests/config.test.js",
+    "test:packages": "node tests/packages.test.js",
+    "verify": "./verify.sh"
   },
   "keywords": [
     "nixos",
