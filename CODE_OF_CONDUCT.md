@@ -199,4 +199,4 @@ For answers to common questions about this code of conduct, see the FAQ at
 
 **Thank you for helping make Nixite a welcoming community for everyone!** 💜
 
-*Last updated: 2024-11-14*
+*Last updated: 2025-01-15*

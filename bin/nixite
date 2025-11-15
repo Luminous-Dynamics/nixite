@@ -1,0 +1,289 @@
+#!/usr/bin/env bash
+
+##
+# Nixite CLI Tool
+# Command-line interface for Nixite management
+##
+
+set -e
+
+# Colors
+CYAN='\033[0;36m'
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+RED='\033[0;31m'
+BLUE='\033[0;34m'
+BOLD='\033[1m'
+NC='\033[0m'
+
+# Get script directory
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+cd "$SCRIPT_DIR"
+
+# Functions
+show_header() {
+    echo -e "${CYAN}${BOLD}"
+    cat << 'EOF'
+┏┓┓• •
+┃┃┓┏┓╋┏┓
+┛┗┗┗┗┗┗
+Nixite CLI v2.1.0
+EOF
+    echo -e "${NC}"
+}
+
+show_help() {
+    show_header
+    cat << 'EOF'
+Usage: nixite <command> [options]
+
+Commands:
+  start              Start Nixite web server
+  stop               Stop running Nixite services
+  restart            Restart Nixite services
+  status             Show Nixite service status
+  test               Run test suite
+  deploy <type>      Deploy Nixite (docker/k8s/nixos)
+  backup             Create backup
+  restore [file]     Restore from backup
+  update             Update Nixite to latest version
+  logs               Show logs
+  health             Run health checks
+  stats              Show project statistics
+  version            Show version information
+  help               Show this help message
+
+Examples:
+  nixite start                # Start web server
+  nixite deploy docker        # Deploy with Docker
+  nixite backup               # Create backup
+  nixite test                 # Run tests
+  nixite logs                 # View logs
+
+For more information: https://github.com/Luminous-Dynamics/nixite
+EOF
+}
+
+show_version() {
+    echo "Nixite v2.1.0"
+    echo "License: MIT"
+    echo "Repository: https://github.com/Luminous-Dynamics/nixite"
+}
+
+# Command handlers
+cmd_start() {
+    echo -e "${BLUE}Starting Nixite...${NC}"
+
+    # Check if already running
+    if lsof -Pi :8000 -sTCP:LISTEN -t >/dev/null ; then
+        echo -e "${YELLOW}⚠${NC} Web server already running on port 8000"
+    else
+        echo -e "${GREEN}✓${NC} Starting web server on http://localhost:8000"
+        python3 -m http.server 8000 &
+        echo $! > /tmp/nixite-web.pid
+    fi
+
+    # Optionally start AI Bridge
+    if [ -f "nixite-luminous-bridge.js" ]; then
+        if lsof -Pi :8890 -sTCP:LISTEN -t >/dev/null ; then
+            echo -e "${YELLOW}⚠${NC} AI Bridge already running on port 8890"
+        else
+            echo -e "${GREEN}✓${NC} Starting AI Bridge on http://localhost:8890"
+            node nixite-luminous-bridge.js &
+            echo $! > /tmp/nixite-bridge.pid
+        fi
+    fi
+
+    echo ""
+    echo -e "${GREEN}${BOLD}Nixite is running!${NC}"
+    echo -e "Web Interface: ${BOLD}http://localhost:8000${NC}"
+    echo -e "AI Bridge: ${BOLD}http://localhost:8890${NC}"
+}
+
+cmd_stop() {
+    echo -e "${BLUE}Stopping Nixite...${NC}"
+
+    # Stop web server
+    if [ -f /tmp/nixite-web.pid ]; then
+        kill $(cat /tmp/nixite-web.pid) 2>/dev/null || true
+        rm /tmp/nixite-web.pid
+        echo -e "${GREEN}✓${NC} Web server stopped"
+    else
+        # Try to find and kill by port
+        lsof -ti:8000 | xargs kill 2>/dev/null || true
+        echo -e "${GREEN}✓${NC} Web server stopped"
+    fi
+
+    # Stop AI Bridge
+    if [ -f /tmp/nixite-bridge.pid ]; then
+        kill $(cat /tmp/nixite-bridge.pid) 2>/dev/null || true
+        rm /tmp/nixite-bridge.pid
+        echo -e "${GREEN}✓${NC} AI Bridge stopped"
+    else
+        lsof -ti:8890 | xargs kill 2>/dev/null || true
+        echo -e "${GREEN}✓${NC} AI Bridge stopped"
+    fi
+
+    echo -e "${GREEN}Nixite stopped${NC}"
+}
+
+cmd_restart() {
+    cmd_stop
+    sleep 1
+    cmd_start
+}
+
+cmd_status() {
+    show_header
+    echo "Service Status:"
+    echo ""
+
+    # Check web server
+    if lsof -Pi :8000 -sTCP:LISTEN -t >/dev/null ; then
+        echo -e "Web Server:  ${GREEN}●${NC} Running on http://localhost:8000"
+    else
+        echo -e "Web Server:  ${RED}●${NC} Stopped"
+    fi
+
+    # Check AI Bridge
+    if lsof -Pi :8890 -sTCP:LISTEN -t >/dev/null ; then
+        echo -e "AI Bridge:   ${GREEN}●${NC} Running on http://localhost:8890"
+    else
+        echo -e "AI Bridge:   ${RED}●${NC} Stopped"
+    fi
+
+    # Check Ollama
+    if command -v ollama &> /dev/null && curl -s http://localhost:11434/api/tags >/dev/null 2>&1; then
+        echo -e "Ollama:      ${GREEN}●${NC} Running on http://localhost:11434"
+    else
+        echo -e "Ollama:      ${RED}●${NC} Not running"
+    fi
+}
+
+cmd_test() {
+    echo -e "${BLUE}Running Nixite test suite...${NC}"
+    echo ""
+    npm run test:all
+}
+
+cmd_deploy() {
+    local deploy_type="${1:-docker}"
+    echo -e "${BLUE}Deploying Nixite (${deploy_type})...${NC}"
+    ./scripts/deploy.sh "$deploy_type"
+}
+
+cmd_backup() {
+    echo -e "${BLUE}Creating backup...${NC}"
+    ./scripts/backup-restore.sh backup
+}
+
+cmd_restore() {
+    local backup_file="${1:-latest}"
+    echo -e "${BLUE}Restoring from backup...${NC}"
+    ./scripts/backup-restore.sh restore "$backup_file"
+}
+
+cmd_update() {
+    echo -e "${BLUE}Updating Nixite...${NC}"
+
+    # Check if git repo
+    if [ -d .git ]; then
+        echo "Fetching latest changes..."
+        git fetch origin
+
+        echo "Current branch: $(git branch --show-current)"
+        echo ""
+
+        # Show what would be updated
+        git log --oneline HEAD..origin/main | head -5
+
+        echo ""
+        read -p "Update to latest version? (y/N): " -n 1 -r
+        echo
+        if [[ $REPLY =~ ^[Yy]$ ]]; then
+            git pull origin main
+            echo -e "${GREEN}✓${NC} Nixite updated successfully!"
+        else
+            echo "Update cancelled"
+        fi
+    else
+        echo -e "${YELLOW}⚠${NC} Not a git repository"
+        echo "Manual update required - download latest release from GitHub"
+    fi
+}
+
+cmd_logs() {
+    echo -e "${BLUE}Viewing logs...${NC}"
+    echo "Press Ctrl+C to exit"
+    echo ""
+
+    # Check deployment type and show appropriate logs
+    if docker ps 2>/dev/null | grep -q nixite; then
+        docker compose logs -f
+    elif systemctl is-active nixite &>/dev/null; then
+        sudo journalctl -u nixite -f
+    elif kubectl get pods -n nixite &>/dev/null; then
+        kubectl logs -f -l app=nixite-web -n nixite
+    else
+        echo -e "${YELLOW}⚠${NC} No active deployment found"
+        echo "Nixite appears to be running locally"
+    fi
+}
+
+cmd_health() {
+    echo -e "${BLUE}Running health checks...${NC}"
+    ./scripts/health-check.sh
+}
+
+cmd_stats() {
+    echo -e "${BLUE}Gathering project statistics...${NC}"
+    ./scripts/stats.sh
+}
+
+# Main command dispatcher
+COMMAND="${1:-help}"
+
+case "$COMMAND" in
+    start)
+        cmd_start
+        ;;
+    stop)
+        cmd_stop
+        ;;
+    restart)
+        cmd_restart
+        ;;
+    status)
+        cmd_status
+        ;;
+    test)
+        cmd_test
+        ;;
+    deploy)
+        cmd_deploy "${2:-docker}"
+        ;;
+    backup)
+        cmd_backup
+        ;;
+    restore)
+        cmd_restore "${2:-latest}"
+        ;;
+    update)
+        cmd_update
+        ;;
+    logs)
+        cmd_logs
+        ;;
+    health)
+        cmd_health
+        ;;
+    stats)
+        cmd_stats
+        ;;
+    version|--version|-v)
+        show_version
+        ;;
+    help|--help|-h|*)
+        show_help
+        ;;
+esac

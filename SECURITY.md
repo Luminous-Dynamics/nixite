@@ -4,10 +4,16 @@
 
 We actively support the following versions of Nixite with security updates:
 
-| Version | Supported          |
-| ------- | ------------------ |
-| 2.0.x   | :white_check_mark: |
-| 1.0.x   | :x:                |
+| Version | Supported          | End of Life |
+| ------- | ------------------ | ----------- |
+| 2.1.x   | ✅ Yes             | TBD         |
+| 2.0.x   | ✅ Yes             | 2026-01-01  |
+| 1.x.x   | ⚠️ Security only   | 2025-06-01  |
+| < 1.0   | ❌ No              | 2024-12-01  |
+
+**Current stable version:** 2.1.0
+
+**Update recommendation:** We strongly recommend always running the latest stable version.
 
 ## Reporting a Vulnerability
 
