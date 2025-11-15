@@ -1,0 +1,269 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: nixite-alerts
+  namespace: nixite
+  labels:
+    app: nixite
+    prometheus: kube-prometheus
+spec:
+  groups:
+  - name: nixite.availability
+    interval: 30s
+    rules:
+    # Service Down
+    - alert: NixiteServiceDown
+      expr: up{job="nixite-web"} == 0
+      for: 1m
+      labels:
+        severity: critical
+        component: web
+      annotations:
+        summary: "Nixite web service is down"
+        description: "The Nixite web service has been down for more than 1 minute. Pod: {{ $labels.instance }}"
+        runbook_url: "https://github.com/Luminous-Dynamics/nixite/blob/main/docs/RUNBOOK.md#service-down"
+
+    - alert: NixiteAIBridgeDown
+      expr: up{job="nixite-bridge"} == 0
+      for: 2m
+      labels:
+        severity: critical
+        component: bridge
+      annotations:
+        summary: "Nixite AI Bridge is down"
+        description: "The AI Bridge has been down for more than 2 minutes. Pod: {{ $labels.instance }}"
+        runbook_url: "https://github.com/Luminous-Dynamics/nixite/blob/main/docs/RUNBOOK.md#ai-bridge-failure"
+
+    # Low Pod Count
+    - alert: NixiteLowPodCount
+      expr: count(kube_pod_info{namespace="nixite", pod=~"nixite-web-.*"}) < 2
+      for: 5m
+      labels:
+        severity: warning
+        component: web
+      annotations:
+        summary: "Low web pod count"
+        description: "Only {{ $value }} web pods are running. Expected minimum: 2"
+
+  - name: nixite.performance
+    interval: 30s
+    rules:
+    # High Error Rate
+    - alert: NixiteHighErrorRate
+      expr: (sum(rate(nixite_http_requests_total{status=~"5.."}[5m])) / sum(rate(nixite_http_requests_total[5m]))) > 0.05
+      for: 5m
+      labels:
+        severity: warning
+        component: web
+      annotations:
+        summary: "High error rate detected"
+        description: "Error rate is {{ $value | humanizePercentage }}. Threshold: 5%"
+        runbook_url: "https://github.com/Luminous-Dynamics/nixite/blob/main/docs/RUNBOOK.md#high-error-rate"
+
+    - alert: NixiteCriticalErrorRate
+      expr: (sum(rate(nixite_http_requests_total{status=~"5.."}[5m])) / sum(rate(nixite_http_requests_total[5m]))) > 0.10
+      for: 2m
+      labels:
+        severity: critical
+        component: web
+      annotations:
+        summary: "Critical error rate detected"
+        description: "Error rate is {{ $value | humanizePercentage }}. Threshold: 10%"
+
+    # High Response Time
+    - alert: NixiteHighResponseTime
+      expr: histogram_quantile(0.95, sum(rate(nixite_http_request_duration_seconds_bucket[5m])) by (le)) > 2
+      for: 10m
+      labels:
+        severity: warning
+        component: web
+      annotations:
+        summary: "High response time detected"
+        description: "95th percentile response time is {{ $value }}s. Threshold: 2s"
+        runbook_url: "https://github.com/Luminous-Dynamics/nixite/blob/main/docs/RUNBOOK.md#performance-degradation"
+
+    - alert: NixiteVeryHighResponseTime
+      expr: histogram_quantile(0.95, sum(rate(nixite_http_request_duration_seconds_bucket[5m])) by (le)) > 5
+      for: 5m
+      labels:
+        severity: critical
+        component: web
+      annotations:
+        summary: "Very high response time detected"
+        description: "95th percentile response time is {{ $value }}s. Threshold: 5s"
+
+    # AI Bridge Performance
+    - alert: NixiteAIBridgeSlowResponse
+      expr: histogram_quantile(0.95, sum(rate(nixite_ai_response_duration_seconds_bucket[5m])) by (le)) > 10
+      for: 10m
+      labels:
+        severity: warning
+        component: bridge
+      annotations:
+        summary: "AI Bridge slow response time"
+        description: "AI Bridge 95th percentile response time is {{ $value }}s. Threshold: 10s"
+
+  - name: nixite.resources
+    interval: 30s
+    rules:
+    # High Memory Usage
+    - alert: NixiteHighMemoryUsage
+      expr: (container_memory_usage_bytes{namespace="nixite", container!="POD"} / container_spec_memory_limit_bytes{namespace="nixite"}) > 0.90
+      for: 5m
+      labels:
+        severity: warning
+        component: "{{ $labels.pod }}"
+      annotations:
+        summary: "High memory usage on {{ $labels.pod }}"
+        description: "Memory usage is {{ $value | humanizePercentage }}. Pod: {{ $labels.pod }}"
+
+    - alert: NixiteCriticalMemoryUsage
+      expr: (container_memory_usage_bytes{namespace="nixite", container!="POD"} / container_spec_memory_limit_bytes{namespace="nixite"}) > 0.95
+      for: 2m
+      labels:
+        severity: critical
+        component: "{{ $labels.pod }}"
+      annotations:
+        summary: "Critical memory usage on {{ $labels.pod }}"
+        description: "Memory usage is {{ $value | humanizePercentage }}. Pod may be OOM killed soon."
+
+    # High CPU Usage
+    - alert: NixiteHighCPUUsage
+      expr: (sum(rate(container_cpu_usage_seconds_total{namespace="nixite", container!="POD"}[5m])) by (pod) / sum(container_spec_cpu_quota{namespace="nixite"}/container_spec_cpu_period{namespace="nixite"}) by (pod)) > 0.90
+      for: 10m
+      labels:
+        severity: warning
+        component: "{{ $labels.pod }}"
+      annotations:
+        summary: "High CPU usage on {{ $labels.pod }}"
+        description: "CPU usage is {{ $value | humanizePercentage }}. Pod: {{ $labels.pod }}"
+
+    # Pod Restarts
+    - alert: NixitePodRestarting
+      expr: rate(kube_pod_container_status_restarts_total{namespace="nixite"}[15m]) > 0
+      for: 5m
+      labels:
+        severity: warning
+        component: "{{ $labels.pod }}"
+      annotations:
+        summary: "Pod {{ $labels.pod }} is restarting"
+        description: "Pod has restarted {{ $value }} times in the last 15 minutes"
+
+    - alert: NixitePodCrashLooping
+      expr: rate(kube_pod_container_status_restarts_total{namespace="nixite"}[15m]) > 3
+      for: 5m
+      labels:
+        severity: critical
+        component: "{{ $labels.pod }}"
+      annotations:
+        summary: "Pod {{ $labels.pod }} is crash looping"
+        description: "Pod has restarted {{ $value }} times in the last 15 minutes"
+
+  - name: nixite.storage
+    interval: 60s
+    rules:
+    # Persistent Volume Usage
+    - alert: NixitePVCAlmostFull
+      expr: (kubelet_volume_stats_used_bytes{namespace="nixite"} / kubelet_volume_stats_capacity_bytes{namespace="nixite"}) > 0.80
+      for: 10m
+      labels:
+        severity: warning
+        component: storage
+      annotations:
+        summary: "PVC {{ $labels.persistentvolumeclaim }} is almost full"
+        description: "PVC usage is {{ $value | humanizePercentage }}. Threshold: 80%"
+
+    - alert: NixitePVCCriticallyFull
+      expr: (kubelet_volume_stats_used_bytes{namespace="nixite"} / kubelet_volume_stats_capacity_bytes{namespace="nixite"}) > 0.90
+      for: 5m
+      labels:
+        severity: critical
+        component: storage
+      annotations:
+        summary: "PVC {{ $labels.persistentvolumeclaim }} is critically full"
+        description: "PVC usage is {{ $value | humanizePercentage }}. Threshold: 90%"
+
+  - name: nixite.sli
+    interval: 60s
+    rules:
+    # SLO Violations
+    - alert: NixiteSLOViolation
+      expr: (1 - (sum(rate(nixite_http_requests_total{status="500"}[30d])) / sum(rate(nixite_http_requests_total[30d])))) < 0.999
+      for: 1h
+      labels:
+        severity: warning
+        slo: availability
+      annotations:
+        summary: "Nixite SLO violation (99.9% availability)"
+        description: "30-day availability is {{ $value | humanizePercentage }}. SLO: 99.9%"
+
+    - alert: NixiteErrorBudgetExhausted
+      expr: (1 - (sum(rate(nixite_http_requests_total{status="500"}[30d])) / sum(rate(nixite_http_requests_total[30d])))) < 0.990
+      for: 30m
+      labels:
+        severity: critical
+        slo: availability
+      annotations:
+        summary: "Nixite error budget exhausted"
+        description: "30-day availability is {{ $value | humanizePercentage }}. Error budget depleted!"
+
+  - name: nixite.dependencies
+    interval: 60s
+    rules:
+    # Ollama Connection
+    - alert: NixiteOllamaConnectionFailed
+      expr: rate(nixite_ai_bridge_errors_total{type="ollama_connection"}[5m]) > 0.05
+      for: 5m
+      labels:
+        severity: warning
+        component: bridge
+      annotations:
+        summary: "Ollama connection failures"
+        description: "{{ $value }} connection failures per second to Ollama"
+        runbook_url: "https://github.com/Luminous-Dynamics/nixite/blob/main/docs/RUNBOOK.md#ollama-not-responding"
+
+    # Certificate Expiry
+    - alert: NixiteCertificateExpiringSoon
+      expr: (nixite_tls_cert_expiry_seconds - time()) / 86400 < 30
+      for: 1h
+      labels:
+        severity: warning
+        component: ingress
+      annotations:
+        summary: "TLS certificate expiring soon"
+        description: "Certificate expires in {{ $value }} days"
+
+    - alert: NixiteCertificateExpiringCritical
+      expr: (nixite_tls_cert_expiry_seconds - time()) / 86400 < 7
+      for: 1h
+      labels:
+        severity: critical
+        component: ingress
+      annotations:
+        summary: "TLS certificate expiring critically soon"
+        description: "Certificate expires in {{ $value }} days. Immediate action required!"
+
+  - name: nixite.business
+    interval: 60s
+    rules:
+    # Low Traffic (Possible Issue)
+    - alert: NixiteLowTraffic
+      expr: sum(rate(nixite_http_requests_total[5m])) < 0.1
+      for: 15m
+      labels:
+        severity: warning
+        component: web
+      annotations:
+        summary: "Unusually low traffic detected"
+        description: "Request rate is {{ $value }} req/s. This may indicate a problem."
+
+    # Package Search Performance
+    - alert: NixiteSlowPackageSearch
+      expr: histogram_quantile(0.95, sum(rate(nixite_search_duration_seconds_bucket[5m])) by (le)) > 1
+      for: 10m
+      labels:
+        severity: warning
+        component: search
+      annotations:
+        summary: "Package search is slow"
+        description: "95th percentile search time is {{ $value }}s. Threshold: 1s"

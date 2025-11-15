@@ -1,0 +1,248 @@
+{
+  "dashboard": {
+    "title": "Nixite System Overview",
+    "tags": ["nixite", "overview"],
+    "timezone": "browser",
+    "schemaVersion": 16,
+    "version": 1,
+    "refresh": "10s",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Request Rate",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+        "targets": [
+          {
+            "expr": "sum(rate(nixite_http_requests_total[5m])) by (component)",
+            "legendFormat": "{{component}}"
+          }
+        ],
+        "yaxes": [
+          {"format": "reqps", "label": "Requests/sec"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 2,
+        "title": "Error Rate",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+        "targets": [
+          {
+            "expr": "sum(rate(nixite_http_requests_total{status=~\"5..\"}[5m])) by (component)",
+            "legendFormat": "{{component}} errors"
+          }
+        ],
+        "yaxes": [
+          {"format": "reqps", "label": "Errors/sec"},
+          {"format": "short"}
+        ],
+        "alert": {
+          "conditions": [
+            {
+              "evaluator": {"params": [0.05], "type": "gt"},
+              "operator": {"type": "and"},
+              "query": {"params": ["A", "5m", "now"]},
+              "reducer": {"params": [], "type": "avg"},
+              "type": "query"
+            }
+          ],
+          "executionErrorState": "alerting",
+          "frequency": "60s",
+          "handler": 1,
+          "name": "High Error Rate",
+          "noDataState": "no_data",
+          "notifications": []
+        }
+      },
+      {
+        "id": 3,
+        "title": "Response Time (p95)",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(nixite_http_request_duration_seconds_bucket[5m])) by (le, component))",
+            "legendFormat": "{{component}} p95"
+          },
+          {
+            "expr": "histogram_quantile(0.99, sum(rate(nixite_http_request_duration_seconds_bucket[5m])) by (le, component))",
+            "legendFormat": "{{component}} p99"
+          }
+        ],
+        "yaxes": [
+          {"format": "s", "label": "Duration"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 4,
+        "title": "Pod Count",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 12, "y": 8},
+        "targets": [
+          {
+            "expr": "count(kube_pod_info{namespace=\"nixite\", pod=~\"nixite-web-.*\"})",
+            "legendFormat": "Web Pods"
+          },
+          {
+            "expr": "count(kube_pod_info{namespace=\"nixite\", pod=~\"nixite-bridge-.*\"})",
+            "legendFormat": "Bridge Pods"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"color": "red", "value": null},
+                {"color": "yellow", "value": 2},
+                {"color": "green", "value": 3}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 5,
+        "title": "Memory Usage",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16},
+        "targets": [
+          {
+            "expr": "sum(container_memory_usage_bytes{namespace=\"nixite\", container!=\"POD\"}) by (pod)",
+            "legendFormat": "{{pod}}"
+          }
+        ],
+        "yaxes": [
+          {"format": "bytes", "label": "Memory"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 6,
+        "title": "CPU Usage",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16},
+        "targets": [
+          {
+            "expr": "sum(rate(container_cpu_usage_seconds_total{namespace=\"nixite\", container!=\"POD\"}[5m])) by (pod)",
+            "legendFormat": "{{pod}}"
+          }
+        ],
+        "yaxes": [
+          {"format": "percentunit", "label": "CPU"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 7,
+        "title": "AI Bridge Requests",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 24},
+        "targets": [
+          {
+            "expr": "sum(rate(nixite_ai_bridge_requests_total[5m])) by (operation)",
+            "legendFormat": "{{operation}}"
+          }
+        ],
+        "yaxes": [
+          {"format": "reqps", "label": "Requests/sec"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 8,
+        "title": "AI Response Time",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 24},
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, sum(rate(nixite_ai_response_duration_seconds_bucket[5m])) by (le))",
+            "legendFormat": "p95"
+          },
+          {
+            "expr": "histogram_quantile(0.99, sum(rate(nixite_ai_response_duration_seconds_bucket[5m])) by (le))",
+            "legendFormat": "p99"
+          }
+        ],
+        "yaxes": [
+          {"format": "s", "label": "Duration"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 9,
+        "title": "Network I/O",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 32},
+        "targets": [
+          {
+            "expr": "sum(rate(container_network_receive_bytes_total{namespace=\"nixite\"}[5m])) by (pod)",
+            "legendFormat": "{{pod}} rx"
+          },
+          {
+            "expr": "sum(rate(container_network_transmit_bytes_total{namespace=\"nixite\"}[5m])) by (pod)",
+            "legendFormat": "{{pod}} tx"
+          }
+        ],
+        "yaxes": [
+          {"format": "Bps", "label": "Bytes/sec"},
+          {"format": "short"}
+        ]
+      },
+      {
+        "id": 10,
+        "title": "Success Rate",
+        "type": "stat",
+        "gridPos": {"h": 8, "w": 6, "x": 12, "y": 32},
+        "targets": [
+          {
+            "expr": "(sum(rate(nixite_http_requests_total{status!~\"5..\"}[5m])) / sum(rate(nixite_http_requests_total[5m]))) * 100",
+            "legendFormat": "Success Rate %"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"color": "red", "value": 0},
+                {"color": "yellow", "value": 95},
+                {"color": "green", "value": 99}
+              ]
+            },
+            "unit": "percent"
+          }
+        }
+      },
+      {
+        "id": 11,
+        "title": "Availability (SLI)",
+        "type": "stat",
+        "gridPos": {"h": 8, "w": 6, "x": 18, "y": 32},
+        "targets": [
+          {
+            "expr": "(1 - (sum(rate(nixite_http_requests_total{status=\"500\"}[30d])) / sum(rate(nixite_http_requests_total[30d])))) * 100",
+            "legendFormat": "30d Availability"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"color": "red", "value": 0},
+                {"color": "yellow", "value": 99},
+                {"color": "green", "value": 99.9}
+              ]
+            },
+            "unit": "percent",
+            "decimals": 3
+          }
+        }
+      }
+    ]
+  }
+}

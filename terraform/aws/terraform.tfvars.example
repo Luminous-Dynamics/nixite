@@ -1,0 +1,29 @@
+# Example Terraform Variables
+# Copy to terraform.tfvars and customize
+
+project_name = "nixite"
+environment  = "prod"
+aws_region   = "us-east-1"
+
+# Network configuration
+vpc_cidr             = "10.0.0.0/16"
+private_subnet_cidrs = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+public_subnet_cidrs  = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+
+# Kubernetes
+kubernetes_version = "1.28"
+
+# Database (optional)
+enable_rds        = true
+db_instance_class = "db.t3.small"
+
+# Cache (optional)
+enable_redis    = true
+redis_node_type = "cache.t3.small"
+
+# Additional tags
+tags = {
+  Owner       = "DevOps Team"
+  CostCenter  = "Engineering"
+  Compliance  = "PCI-DSS"
+}

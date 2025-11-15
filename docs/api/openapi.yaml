@@ -1,0 +1,386 @@
+openapi: 3.0.3
+info:
+  title: Nixite AI Bridge API
+  description: |
+    AI-powered package discovery and recommendation API for Nixite.
+
+    The AI Bridge provides intelligent package recommendations, natural language search,
+    and feedback analysis using the Gemma language model via Ollama.
+  version: 2.1.0
+  contact:
+    name: Luminous Dynamics
+    url: https://luminousdynamics.org
+    email: support@luminousdynamics.org
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+
+servers:
+  - url: http://localhost:8890
+    description: Local development
+  - url: https://nixite.example.com/api/bridge
+    description: Production (behind reverse proxy)
+
+tags:
+  - name: health
+    description: Health and status endpoints
+  - name: feedback
+    description: Package feedback analysis
+  - name: search
+    description: Natural language package search
+  - name: recommendations
+    description: Package recommendations
+
+paths:
+  /health:
+    get:
+      summary: Health check
+      description: Check if the AI Bridge is healthy and ready to serve requests
+      operationId: getHealth
+      tags:
+        - health
+      responses:
+        '200':
+          description: Service is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+        '503':
+          description: Service is unhealthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+
+  /feedback:
+    post:
+      summary: Analyze package feedback
+      description: Submit user feedback about a package and receive AI-powered analysis
+      operationId: submitFeedback
+      tags:
+        - feedback
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/FeedbackRequest'
+      responses:
+        '200':
+          description: Feedback analyzed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/FeedbackResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /search:
+    post:
+      summary: Natural language package search
+      description: Search for packages using natural language queries
+      operationId: searchPackages
+      tags:
+        - search
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'
+      responses:
+        '200':
+          description: Search completed successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /recommend:
+    post:
+      summary: Get package recommendations
+      description: Get personalized package recommendations based on user context
+      operationId: getRecommendations
+      tags:
+        - recommendations
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RecommendationRequest'
+      responses:
+        '200':
+          description: Recommendations generated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RecommendationResponse'
+        '400':
+          description: Invalid request
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '500':
+          description: Server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /metrics:
+    get:
+      summary: Prometheus metrics
+      description: Expose metrics in Prometheus format
+      operationId: getMetrics
+      tags:
+        - health
+      responses:
+        '200':
+          description: Metrics in Prometheus format
+          content:
+            text/plain:
+              schema:
+                type: string
+                example: |
+                  # HELP nixite_http_requests_total Total HTTP requests
+                  # TYPE nixite_http_requests_total counter
+                  nixite_http_requests_total{method="POST",path="/feedback",status="200"} 42
+
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      properties:
+        status:
+          type: string
+          enum: [healthy, degraded, unhealthy]
+          description: Overall health status
+        timestamp:
+          type: string
+          format: date-time
+          description: Timestamp of health check
+        uptime:
+          type: number
+          description: Service uptime in seconds
+        model:
+          type: string
+          description: AI model being used
+          example: "gemma:2b"
+        ollama:
+          type: object
+          properties:
+            connected:
+              type: boolean
+              description: Whether Ollama is connected
+            version:
+              type: string
+              description: Ollama version
+        stats:
+          type: object
+          properties:
+            totalRequests:
+              type: integer
+              description: Total requests served
+            avgResponseTime:
+              type: number
+              description: Average response time in seconds
+            errorRate:
+              type: number
+              description: Error rate (0-1)
+
+    FeedbackRequest:
+      type: object
+      required:
+        - packageName
+        - feedback
+      properties:
+        packageName:
+          type: string
+          description: Name of the package
+          example: "vim"
+          minLength: 1
+          maxLength: 100
+        feedback:
+          type: string
+          description: User feedback text
+          example: "Great text editor with powerful features"
+          minLength: 1
+          maxLength: 1000
+        context:
+          type: object
+          description: Additional context
+          properties:
+            category:
+              type: string
+              example: "work"
+            userLevel:
+              type: string
+              enum: [beginner, intermediate, advanced]
+              example: "advanced"
+
+    FeedbackResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether analysis succeeded
+        analysis:
+          type: object
+          properties:
+            sentiment:
+              type: string
+              enum: [positive, neutral, negative]
+              description: Sentiment analysis result
+            topics:
+              type: array
+              items:
+                type: string
+              description: Identified topics
+              example: ["text-editing", "productivity"]
+            recommendation:
+              type: string
+              description: AI-generated recommendation
+              example: "Users who like vim might also enjoy neovim or emacs"
+
+    SearchRequest:
+      type: object
+      required:
+        - query
+      properties:
+        query:
+          type: string
+          description: Natural language search query
+          example: "I need a tool for editing photos"
+          minLength: 1
+          maxLength: 500
+        limit:
+          type: integer
+          description: Maximum number of results
+          default: 10
+          minimum: 1
+          maximum: 50
+        category:
+          type: string
+          description: Filter by category
+          enum: [create, connect, grow, work, play, secure, manage, serve]
+
+    SearchResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether search succeeded
+        results:
+          type: array
+          items:
+            type: object
+            properties:
+              package:
+                type: string
+                description: Package name
+                example: "gimp"
+              relevance:
+                type: number
+                description: Relevance score (0-1)
+                example: 0.95
+              reason:
+                type: string
+                description: Why this package matches
+                example: "Professional photo editing tool"
+
+    RecommendationRequest:
+      type: object
+      properties:
+        installedPackages:
+          type: array
+          items:
+            type: string
+          description: Already installed packages
+          example: ["vim", "git", "tmux"]
+        categories:
+          type: array
+          items:
+            type: string
+          description: Preferred categories
+          example: ["work", "create"]
+        limit:
+          type: integer
+          description: Maximum number of recommendations
+          default: 5
+          minimum: 1
+          maximum: 20
+
+    RecommendationResponse:
+      type: object
+      properties:
+        success:
+          type: boolean
+          description: Whether recommendations generated successfully
+        recommendations:
+          type: array
+          items:
+            type: object
+            properties:
+              package:
+                type: string
+                description: Recommended package name
+                example: "neovim"
+              score:
+                type: number
+                description: Recommendation score (0-1)
+                example: 0.92
+              reason:
+                type: string
+                description: Reason for recommendation
+                example: "Modern vim alternative with Lua scripting"
+
+    ErrorResponse:
+      type: object
+      properties:
+        error:
+          type: string
+          description: Error message
+          example: "Invalid request: packageName is required"
+        code:
+          type: string
+          description: Error code
+          example: "VALIDATION_ERROR"
+        timestamp:
+          type: string
+          format: date-time
+          description: When the error occurred
+
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: API key for authentication (if enabled)
+
+security:
+  - ApiKeyAuth: []
