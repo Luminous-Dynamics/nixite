@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Nixite v2 - Modern Visual NixOS Discovery</title>
-    
+
     <!-- Improved Meta Tags -->
     <meta name="description" content="Visual package discovery for NixOS - Find, install, and manage software with an intuitive interface">
     <meta name="theme-color" content="#7c3aed">
-    
+
+    <!-- Phase 11 & 12 Feature Styles -->
+    <link rel="stylesheet" href="css/phase11-features.css">
+
     <style>
         /* CSS Variables for Easy Theming */
         :root {
@@ -827,6 +830,18 @@
             </div>
 
             <div class="header-actions">
+                <button class="btn btn-ghost btn-icon" aria-label="View favorites" id="favoritesBtn" title="Favorites">
+                    ★
+                </button>
+                <button class="btn btn-ghost btn-icon" aria-label="Compare packages" id="compareBtn" title="Compare">
+                    ⚖️
+                </button>
+                <button class="btn btn-ghost btn-icon" aria-label="View history" id="historyBtn" title="History">
+                    📜
+                </button>
+                <button class="btn btn-ghost btn-icon" aria-label="View statistics" id="statsBtn" title="Statistics">
+                    📊
+                </button>
                 <button class="btn btn-ghost btn-icon" aria-label="Toggle dark mode" id="themeToggle">
                     🌙
                 </button>
@@ -896,11 +911,31 @@
         </div>
     </main>
 
+    <!-- Modal/Panel Overlays -->
+    <div class="modal-overlay" id="modalOverlay"></div>
+    <div class="modal-panel" id="favoritesPanel"></div>
+    <div class="modal-panel" id="comparePanel"></div>
+    <div class="modal-panel" id="historyPanel"></div>
+    <div class="modal-panel" id="statsPanel"></div>
+
     <!-- Toast Container -->
     <div class="toast-container" id="toastContainer"></div>
 
+    <!-- Notification Container (for Phase 11 features) -->
+    <div class="notification-container" id="notificationContainer"></div>
+
     <!-- Configuration -->
     <script src="config.js"></script>
+
+    <!-- Phase 11 & 12: Enhanced Features -->
+    <script src="js/favorites.js"></script>
+    <script src="js/comparison.js"></script>
+    <script src="js/history.js"></script>
+    <script src="js/stats.js"></script>
+    <script src="js/enhanced-search.js"></script>
+    <script src="js/recommendations.js"></script>
+    <script src="js/accessibility.js"></script>
+    <script src="js/ui-integration.js"></script>
 
     <!-- External Scripts -->
     <script src="install-manager.js"></script>
