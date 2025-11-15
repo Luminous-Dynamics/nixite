@@ -1,0 +1,207 @@
+[
+  {
+    "name": "type: bug",
+    "color": "d73a4a",
+    "description": "Something isn't working correctly"
+  },
+  {
+    "name": "type: feature",
+    "color": "a2eeef",
+    "description": "New feature or request"
+  },
+  {
+    "name": "type: enhancement",
+    "color": "84b6eb",
+    "description": "Improvement to existing feature"
+  },
+  {
+    "name": "type: documentation",
+    "color": "0075ca",
+    "description": "Documentation improvements or additions"
+  },
+  {
+    "name": "type: refactor",
+    "color": "fbca04",
+    "description": "Code refactoring without functional changes"
+  },
+  {
+    "name": "type: performance",
+    "color": "ff6b6b",
+    "description": "Performance improvements"
+  },
+  {
+    "name": "type: security",
+    "color": "ee0701",
+    "description": "Security-related issue or improvement"
+  },
+  {
+    "name": "type: test",
+    "color": "0e8a16",
+    "description": "Testing improvements or additions"
+  },
+  {
+    "name": "type: chore",
+    "color": "fef2c0",
+    "description": "Maintenance tasks, dependencies, build"
+  },
+  {
+    "name": "priority: critical",
+    "color": "b60205",
+    "description": "Critical priority - needs immediate attention"
+  },
+  {
+    "name": "priority: high",
+    "color": "d93f0b",
+    "description": "High priority - should be addressed soon"
+  },
+  {
+    "name": "priority: medium",
+    "color": "fbca04",
+    "description": "Medium priority - normal queue"
+  },
+  {
+    "name": "priority: low",
+    "color": "0e8a16",
+    "description": "Low priority - nice to have"
+  },
+  {
+    "name": "status: needs-triage",
+    "color": "d876e3",
+    "description": "Needs review and categorization"
+  },
+  {
+    "name": "status: in-progress",
+    "color": "c2e0c6",
+    "description": "Currently being worked on"
+  },
+  {
+    "name": "status: blocked",
+    "color": "d93f0b",
+    "description": "Blocked by another issue or dependency"
+  },
+  {
+    "name": "status: ready",
+    "color": "0e8a16",
+    "description": "Ready for development"
+  },
+  {
+    "name": "status: on-hold",
+    "color": "fbca04",
+    "description": "On hold pending decision"
+  },
+  {
+    "name": "status: wontfix",
+    "color": "ffffff",
+    "description": "This will not be worked on"
+  },
+  {
+    "name": "area: frontend",
+    "color": "5319e7",
+    "description": "Frontend/UI related"
+  },
+  {
+    "name": "area: backend",
+    "color": "0052cc",
+    "description": "Backend/server related"
+  },
+  {
+    "name": "area: ai-bridge",
+    "color": "1d76db",
+    "description": "AI Bridge (Luminous Bridge) related"
+  },
+  {
+    "name": "area: nixos",
+    "color": "7057ff",
+    "description": "NixOS module or packaging"
+  },
+  {
+    "name": "area: docker",
+    "color": "0db7ed",
+    "description": "Docker/containerization related"
+  },
+  {
+    "name": "area: deployment",
+    "color": "006b75",
+    "description": "Deployment and infrastructure"
+  },
+  {
+    "name": "area: packages",
+    "color": "c5def5",
+    "description": "Package data or management"
+  },
+  {
+    "name": "area: config",
+    "color": "bfdadc",
+    "description": "Configuration related"
+  },
+  {
+    "name": "good first issue",
+    "color": "7057ff",
+    "description": "Good for newcomers"
+  },
+  {
+    "name": "help wanted",
+    "color": "008672",
+    "description": "Extra attention is needed"
+  },
+  {
+    "name": "question",
+    "color": "d876e3",
+    "description": "Further information is requested"
+  },
+  {
+    "name": "duplicate",
+    "color": "cfd3d7",
+    "description": "This issue or pull request already exists"
+  },
+  {
+    "name": "invalid",
+    "color": "e4e669",
+    "description": "This doesn't seem right"
+  },
+  {
+    "name": "dependencies",
+    "color": "0366d6",
+    "description": "Pull requests that update a dependency"
+  },
+  {
+    "name": "breaking change",
+    "color": "d73a4a",
+    "description": "Introduces a breaking change"
+  },
+  {
+    "name": "needs review",
+    "color": "fbca04",
+    "description": "Needs code review"
+  },
+  {
+    "name": "needs testing",
+    "color": "d4c5f9",
+    "description": "Needs testing before merge"
+  },
+  {
+    "name": "hacktoberfest",
+    "color": "ff6b6b",
+    "description": "Hacktoberfest participation"
+  },
+  {
+    "name": "community",
+    "color": "0e8a16",
+    "description": "Community-driven contribution"
+  },
+  {
+    "name": "design",
+    "color": "e99695",
+    "description": "Design or UX related"
+  },
+  {
+    "name": "accessibility",
+    "color": "f9d0c4",
+    "description": "Accessibility improvements"
+  },
+  {
+    "name": "i18n",
+    "color": "c2e0c6",
+    "description": "Internationalization/localization"
+  }
+]
