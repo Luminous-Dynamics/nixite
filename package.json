@@ -8,10 +8,15 @@
     "bridge": "node nixite-luminous-bridge.js",
     "dev": "python3 -m http.server 8000",
     "serve": "python3 -m http.server 8000",
-    "test": "node tests/config.test.js && node tests/packages.test.js",
+    "test": "node tests/config.test.js && node tests/packages.test.js && node tests/integration.test.js",
     "test:config": "node tests/config.test.js",
     "test:packages": "node tests/packages.test.js",
-    "verify": "./verify.sh"
+    "test:integration": "node tests/integration.test.js",
+    "test:all": "npm run test:config && npm run test:packages && npm run test:integration",
+    "verify": "./verify.sh",
+    "health": "./scripts/health-check.sh",
+    "stats": "./scripts/stats.sh",
+    "setup-labels": "./scripts/setup-labels.sh"
   },
   "keywords": [
     "nixos",
