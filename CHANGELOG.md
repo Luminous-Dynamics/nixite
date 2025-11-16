@@ -12,10 +12,134 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - GraphQL API
 - Plugin system for extensibility
 - Advanced data visualization with charts
-- Package details modal
-- Custom theme system
 - Visual filter builder
-- Configuration export/import
+
+## [2.5.0] - 2025-01-16
+
+### Added - Phase 14: Visual Polish, PWA Assets & Data Management
+
+**Offline Experience:**
+- `offline.html` (150+ lines) - Beautiful offline fallback page
+  - Gradient background matching brand theme
+  - Floating icon animation
+  - List of available offline features
+  - Auto-redirect when connection restored
+  - Responsive design for all screen sizes
+  - Clean, professional offline experience
+
+**Package Details System:**
+- `js/package-details.js` (500+ lines) - Rich package information modal
+  - Comprehensive package information display
+  - Installation options (GUI tools, CLI, NixOS configuration)
+  - One-click copy to clipboard for all commands
+  - Installation history integration
+  - Similar packages recommendations
+  - Package sharing functionality
+  - Add to favorites/collections directly from modal
+  - Beautiful responsive modal with smooth animations
+  - Keyboard navigation support (Escape to close)
+
+**Theme Customization:**
+- `js/theme-manager.js` (500+ lines) - Complete theme system
+  - 8 professionally designed preset themes:
+    - Default Purple (brand colors)
+    - Ocean Blue
+    - Forest Green
+    - Sunset Orange
+    - Rose Pink
+    - Midnight Purple
+    - Crimson Red
+    - Teal Dream
+  - Custom color picker with automatic variant generation
+  - Live theme preview
+  - Theme export/import functionality
+  - localStorage persistence
+  - Mobile meta theme-color updates
+  - Beautiful theme selection panel
+  - One-click theme switching
+
+**Data Management:**
+- `js/data-manager.js` (450+ lines) - Complete backup/restore system
+  - Export all user data (favorites, collections, comparison, history, searches, theme, settings)
+  - Import with confirmation dialogs
+  - Individual exports for each data type
+  - Storage usage statistics display
+  - Clear all data with double confirmation
+  - Automatic timestamped backups
+  - Data migration between devices
+  - Beautiful data management panel
+
+**PWA Icon Documentation:**
+- `icons/README.md` - Comprehensive icon generation guide
+  - Required icon sizes documentation (72px to 512px)
+  - Three generation methods:
+    - Online tools (PWA Builder, RealFaviconGenerator)
+    - ImageMagick command-line
+    - Node.js with Sharp
+  - Icon design guidelines
+  - Maskable icon specifications
+  - Testing instructions
+  - Additional assets documentation (shortcuts, screenshots)
+
+**Updated index.html:**
+- Integrated package details modal script
+- Integrated theme manager script
+- Integrated data manager script
+- All Phase 14 features fully wired
+
+### Improved
+- **User Experience** - Rich package details with comprehensive information
+- **Personalization** - Full theme customization with 8 presets + custom colors
+- **Data Safety** - Complete backup/restore with export/import
+- **Offline Experience** - Professional offline fallback page
+- **Visual Polish** - Consistent design across all new features
+- **Accessibility** - Keyboard navigation and ARIA labels
+- **Mobile Experience** - Responsive design for all new features
+
+### Features
+- **Package Details Modal**: View comprehensive package information with installation commands
+- **Theme System**: Choose from 8 presets or create custom themes
+- **Data Export/Import**: Backup and restore all user data
+- **Storage Stats**: Monitor localStorage usage
+- **Individual Exports**: Export specific data types
+- **Offline Fallback**: Beautiful page when offline
+- **Theme Sharing**: Export and import custom themes
+
+### Technical Details
+- Complete theme management with CSS variable manipulation
+- Data export with JSON structure versioning
+- Automatic color variant generation (dark/light)
+- LocalStorage-based persistence for all user data
+- Beautiful modal overlays with backdrop blur
+- Responsive grid layouts for theme selection
+- Storage size calculation and display
+- File download/upload with native browser APIs
+
+### New User Capabilities
+- Customize appearance with 8 themes or create custom colors
+- Backup all data to JSON file
+- Restore data from previous backup
+- View detailed package information in modal
+- Copy installation commands with one click
+- See similar packages and recommendations
+- Monitor storage usage
+- Export/import individual data types
+- Share custom themes with others
+
+### Browser Support
+- All modern browsers: Full feature support
+- Chrome/Edge: Optimal experience
+- Firefox: Complete functionality
+- Safari/iOS: Full compatibility
+- Offline fallback works in all browsers
+
+### Notes
+- Theme system uses CSS variables for instant updates
+- Data export includes version information for future compatibility
+- All modals support keyboard navigation (Escape key)
+- Storage stats show human-readable sizes (B, KB, MB)
+- No breaking changes - all features are additive
+- Backward compatible with all previous versions
 
 ## [2.4.0] - 2025-01-15
 

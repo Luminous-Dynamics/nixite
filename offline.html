@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Offline - Nixite</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            color: white;
+        }
+
+        .offline-container {
+            max-width: 600px;
+            text-align: center;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .offline-icon {
+            font-size: 120px;
+            margin-bottom: 30px;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0%, 100% {
+                transform: translateY(0);
+            }
+            50% {
+                transform: translateY(-20px);
+            }
+        }
+
+        h1 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        p {
+            font-size: 1.25rem;
+            margin-bottom: 15px;
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+
+        .features {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            margin: 40px 0;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .features h2 {
+            font-size: 1.5rem;
+            margin-bottom: 20px;
+        }
+
+        .features ul {
+            list-style: none;
+            text-align: left;
+        }
+
+        .features li {
+            padding: 10px 0;
+            font-size: 1.1rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .features li::before {
+            content: '✓';
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 50%;
+            text-align: center;
+            line-height: 30px;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 15px 40px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-top: 20px;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+        }
+
+        .status {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+
+        .pulse {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            background: #ff6b6b;
+            border-radius: 50%;
+            margin-right: 8px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% {
+                opacity: 0.5;
+                transform: scale(1.2);
+            }
+        }
+
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+
+            .offline-icon {
+                font-size: 80px;
+            }
+
+            p {
+                font-size: 1rem;
+            }
+
+            .features {
+                padding: 20px;
+            }
+
+            .features li {
+                font-size: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <div class="offline-icon">🔌</div>
+
+        <h1>You're Offline</h1>
+
+        <p>No internet connection detected. Don't worry, Nixite works offline!</p>
+
+        <div class="features">
+            <h2>Available Offline:</h2>
+            <ul>
+                <li>Browse cached packages</li>
+                <li>View your favorites and collections</li>
+                <li>Access installation history</li>
+                <li>Compare packages</li>
+                <li>View statistics</li>
+            </ul>
+        </div>
+
+        <p>Cached content is available. Try navigating to the home page:</p>
+
+        <a href="/" class="btn">Go to Home Page</a>
+
+        <div class="status">
+            <span class="pulse"></span>
+            Waiting for internet connection...
+        </div>
+    </div>
+
+    <script>
+        // Auto-redirect when online
+        window.addEventListener('online', () => {
+            window.location.reload();
+        });
+
+        // Check connection status
+        if (navigator.onLine) {
+            window.location.reload();
+        }
+    </script>
+</body>
+</html>
