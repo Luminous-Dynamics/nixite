@@ -11,8 +11,177 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Multi-language support (i18n)
 - GraphQL API
 - Plugin system for extensibility
-- Advanced data visualization with charts
-- Visual filter builder
+
+## [2.6.0] - 2025-01-16
+
+### Added - Phase 15: Advanced UI/UX & Interactive Features
+
+**Visual Filter Builder:**
+- `js/filter-builder.js` (700+ lines) - Advanced filter construction system
+  - Drag-and-drop filter building interface
+  - Visual query builder with AND/OR logic operators
+  - Filter templates for common use cases (favorites, popular, development, etc.)
+  - Export/import filter configurations
+  - Saved filters with localStorage persistence
+  - Field-specific operators (text, number, list, boolean)
+  - Real-time filter preview and validation
+  - Beautiful responsive filter panel
+  - Keyboard shortcut (Ctrl+Shift+F) to open
+
+**Advanced Charts & Visualization:**
+- `js/charts.js` (700+ lines) - Pure JavaScript/SVG charting engine
+  - Pie charts for category distribution
+  - Bar charts for comparative data
+  - Line charts for trends and timelines
+  - Donut charts with center labels
+  - Progress rings for metrics
+  - Interactive tooltips on hover
+  - Responsive chart sizing
+  - Custom color palettes
+  - Chart legends with labels and values
+  - No external dependencies - fully self-contained
+  - Integration with statistics dashboard
+  - Category distribution visualization
+  - Installation history timeline
+  - Search trends analysis
+  - Usage metrics displays
+
+**Keyboard Shortcuts Panel:**
+- `js/shortcuts-panel.js` (500+ lines) - Comprehensive shortcuts help system
+  - Categorized shortcuts display (General, Search, Packages, Panels, etc.)
+  - Searchable shortcuts list
+  - Mac vs Windows/Linux key mappings
+  - Platform-specific shortcuts (⌘ on Mac, Ctrl on Windows)
+  - Print-friendly shortcuts reference
+  - Beautiful modal interface with icons
+  - Press ? key to open
+  - Export to PDF capability
+  - 40+ documented shortcuts across 8 categories
+
+**Command Palette:**
+- `js/command-palette.js` (650+ lines) - VS Code-style command launcher
+  - Fuzzy search for all actions
+  - 40+ commands across 7 categories
+  - Recent commands tracking
+  - Keyboard-first navigation (Arrow keys, Enter, Esc)
+  - Command categories: Search, Panels, Data, Appearance, Help, PWA, View, Quick Actions
+  - Ctrl+K (Cmd+K on Mac) to open
+  - Smart command suggestions
+  - One-click command execution
+  - Beautiful command palette UI
+  - Persistent recent command history
+
+**Installation Wizard:**
+- `js/installation-wizard.js` (700+ lines) - Interactive NixOS setup guide
+  - 5-step guided wizard for new users
+  - Experience level selection (Beginner, Intermediate, Advanced)
+  - Installation method comparison (nix-env, configuration.nix, nix-shell)
+  - Pros/cons for each method
+  - Step-by-step instructions with code examples
+  - One-click code copying
+  - Best practices and pro tips
+  - Automatic first-time user detection
+  - User preference persistence
+  - Beautiful multi-step wizard UI
+  - Progress indicator and navigation
+
+**Interactive Tutorial System:**
+- `js/tutorial-system.js` (650+ lines) - Feature tours and contextual help
+  - 4 comprehensive tutorials:
+    - Quick Start Tour (2 min, 5 steps)
+    - Feature Tour (5 min, 6 steps)
+    - Advanced Features (4 min, 4 steps)
+    - Package Installation (3 min, 3 steps)
+  - Interactive step-by-step guidance
+  - Element highlighting and spotlighting
+  - Progress tracking and completion badges
+  - Contextual tips system
+  - Tutorial completion tracking
+  - Smart positioning for tooltips
+  - Skip/replay functionality
+  - Tutorial selector modal
+  - Auto-dismiss tips after 5 seconds
+
+**Updated index.html:**
+- Integrated all 6 Phase 15 scripts
+- Proper script loading order maintained
+- Full feature integration
+
+### Improved
+- **Discoverability** - Command palette and shortcuts panel make features easy to find
+- **User Onboarding** - Installation wizard and tutorials guide new users
+- **Data Visualization** - Beautiful charts enhance statistics dashboard
+- **Advanced Filtering** - Visual filter builder for complex queries
+- **Power User Experience** - Keyboard shortcuts and command palette for efficiency
+- **Learning Curve** - Interactive tutorials reduce time to productivity
+
+### Features
+- **Visual Filter Builder**: Drag-and-drop filter construction with AND/OR logic
+- **Advanced Charts**: 5 chart types with interactive tooltips (no dependencies)
+- **Shortcuts Panel**: Searchable, printable shortcuts reference (40+ shortcuts)
+- **Command Palette**: Fuzzy search for 40+ commands across 7 categories
+- **Installation Wizard**: 5-step guide with method comparison
+- **Tutorial System**: 4 interactive tours with 18 total steps
+- **Contextual Tips**: Smart tips that appear at the right time
+- **Chart Export**: Visual data representation with legends
+- **Filter Templates**: Pre-built filters for common scenarios
+- **Keyboard Navigation**: Full keyboard support across all features
+
+### Technical Details
+- Pure JavaScript/SVG charts (no Chart.js or external libs)
+- Fuzzy search algorithm for command palette
+- Smart tooltip positioning system
+- Element highlighting with spotlight effect
+- LocalStorage for all user preferences
+- Drag-and-drop filter reordering
+- Dynamic operator selection based on field type
+- Progress tracking with visual indicators
+- Cross-platform keyboard shortcut handling
+- Responsive layouts for all new panels
+
+### New User Capabilities
+- Build complex filters visually without writing code
+- View statistics with beautiful interactive charts
+- Find any feature instantly with command palette
+- Learn shortcuts organized by category
+- Follow step-by-step installation guides
+- Complete interactive feature tours
+- Get contextual tips while using the app
+- Print keyboard shortcuts reference
+- Export/import custom filters
+- Track tutorial completion progress
+
+### Keyboard Shortcuts Added
+- `?` - Show keyboard shortcuts panel
+- `Ctrl+K` / `Cmd+K` - Open command palette
+- `Ctrl+Shift+F` - Open visual filter builder
+- Arrow keys - Navigate command palette and tutorials
+- `Enter` - Execute selected command
+- `Esc` - Close any panel or tutorial
+
+### Browser Support
+- All modern browsers: Full support
+- Chrome/Edge: Optimal experience with all features
+- Firefox: Complete functionality
+- Safari/iOS: Full compatibility
+- SVG charts work everywhere
+
+### Performance
+- Lightweight charting engine (~700 lines vs 100KB+ libraries)
+- No external chart dependencies
+- Fast fuzzy search in command palette
+- Efficient filter builder with minimal DOM operations
+- Lazy-loaded tutorial content
+- Optimized tooltip positioning
+
+### Notes
+- All charts are pure SVG - no Canvas or external libs
+- Filter builder supports nested conditions with groups
+- Command palette learns from your usage
+- Tutorials can be replayed anytime
+- Installation wizard adapts to experience level
+- No breaking changes - fully backward compatible
+- All features are progressive enhancements
 
 ## [2.5.0] - 2025-01-16
 
