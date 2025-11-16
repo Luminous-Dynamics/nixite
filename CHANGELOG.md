@@ -10,8 +10,106 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Planned Features
 - Multi-language support (i18n)
 - GraphQL API
-- Progressive Web App (PWA) features
 - Plugin system for extensibility
+- Advanced data visualization with charts
+- Package details modal
+- Custom theme system
+- Visual filter builder
+- Configuration export/import
+
+## [2.4.0] - 2025-01-15
+
+### Added - Phase 13: Progressive Web App & Offline Features
+
+**Progressive Web App (PWA) Implementation:**
+- `manifest.json` - Complete PWA manifest with app metadata
+  - App name, description, and branding
+  - 8 icon sizes (72px to 512px) for all devices
+  - Standalone display mode for app-like experience
+  - 3 app screenshots (desktop and mobile)
+  - App shortcuts for quick actions (Search, Favorites, Stats)
+  - Share target integration
+  - Portrait orientation preference
+
+- `service-worker.js` (400+ lines) - Complete offline functionality
+  - Cache-first strategy for static assets
+  - Network-first strategy for API calls
+  - Automatic cache versioning (v2.3.0)
+  - Background cache updates
+  - Offline page support
+  - Push notification support
+  - Background sync capabilities
+  - Cache cleanup on activation
+  - Custom cache for data vs static files
+
+- `js/pwa-manager.js` (500+ lines) - PWA feature management
+  - Service worker registration and lifecycle
+  - Install prompt handling with deferred prompt
+  - Update notifications when new version available
+  - Online/offline detection with visual indicators
+  - Automatic update checking (hourly + on focus)
+  - Connection status indicator
+  - Push notification subscription
+  - Cache management (clear, version check)
+  - PWA installation status detection
+  - Standalone mode detection
+  - Install button with slide-in animation
+
+**Updated index.html:**
+- Added PWA manifest link
+- Added Apple PWA meta tags for iOS support
+- Integrated PWA manager script
+- Mobile app capabilities enabled
+
+### Improved
+- **Offline Support** - Complete offline functionality with service worker
+- **Installability** - One-click app installation on all platforms
+- **Performance** - Aggressive caching for instant load times
+- **User Experience** - App-like experience when installed
+- **Connectivity** - Visual online/offline indicators
+- **Updates** - Automatic update detection and notification
+
+### Features
+- **Installable**: Install as native app on desktop and mobile
+- **Offline-First**: Works completely offline after first visit
+- **Auto-Updates**: Automatic update detection and notification
+- **Connection Aware**: Visual indicators for online/offline status
+- **Push Ready**: Infrastructure for push notifications
+- **App Shortcuts**: Quick actions from app icon
+- **Share Target**: Can receive shared content from other apps
+
+### Technical Details
+- Complete PWA manifest with all required fields
+- Service worker with cache-first and network-first strategies
+- Automatic cache versioning and cleanup
+- Background sync and push notification support
+- iOS/Safari PWA support with Apple meta tags
+- Deferred install prompt for better UX
+- Update notification system
+- Connection status monitoring
+
+### PWA Features
+- Standalone display mode (no browser UI)
+- Custom splash screen
+- App icon on home screen/dock
+- Push notifications ready
+- Background sync ready
+- Share target capability
+- App shortcuts for quick actions
+- Offline page fallback
+
+### Browser Support
+- Chrome/Edge: Full PWA support
+- Firefox: Service worker and offline support
+- Safari/iOS: Web app capabilities with meta tags
+- All modern browsers: Service worker caching
+
+### Notes
+- PWA features are progressive - work in all browsers
+- Install prompt shows automatically when criteria met
+- Offline support activates after first visit
+- Service worker caches update automatically
+- No breaking changes
 
 ## [2.3.0] - 2025-01-15
 
@@ -554,11 +652,39 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## Version History
 
+- **2.4.0** (2025-01-15) - PWA: Installable app, offline support, service worker, auto-updates
 - **2.3.0** (2025-01-15) - UI Integration: Complete Phase 11 integration, advanced search, recommendations, accessibility
 - **2.2.0** (2025-01-15) - Enhanced UX: Favorites, collections, comparison, history, statistics, community tools
 - **2.1.0** (2024-11-14) - Production-ready: CI/CD, Docker, NixOS module, comprehensive testing and documentation
 - **2.0.0** (2024-11-14) - Major improvements to architecture and documentation
 - **1.0.0** (2024-11-13) - Initial release
+
+## Upgrade Guide
+
+### From 2.3.0 to 2.4.0
+
+No breaking changes! Phase 13 adds Progressive Web App features.
+
+New PWA features available immediately:
+1. **Installable App**: Install Nixite as a native app on any device
+2. **Offline Support**: Works completely offline after first visit
+3. **Auto-Updates**: Automatic update detection and notification
+4. **App Shortcuts**: Quick actions from installed app icon
+
+How to install:
+- **Desktop (Chrome/Edge)**: Click the install button in the address bar or the "📱 Install App" button
+- **Mobile**: Add to Home Screen from browser menu
+- **iOS/Safari**: Use "Add to Home Screen" from share menu
+
+PWA benefits:
+- Faster load times with aggressive caching
+- Works offline after first visit
+- App-like experience without browser UI
+- Push notifications ready (coming soon)
+- Automatic background updates
+- Visual online/offline indicators
+
+All existing features continue to work exactly as before!
 
 ## Upgrade Guide
 
